@@ -20,7 +20,7 @@ const collections: CollectionSlug[] = [
   'search',
 ]
 
-const globals: GlobalSlug[] = ['header', 'footer']
+const globals: Array<'header' | 'footer'> = ['header', 'footer']
 
 const tags = ['Technology', 'News', 'Finance', 'Design', 'Software', 'Engineering']
 
