@@ -5,6 +5,7 @@ import {
   FixedToolbarFeature,
   HeadingFeature,
   HorizontalRuleFeature,
+  InlineCodeFeature,
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
@@ -41,7 +42,7 @@ export const Posts: CollectionConfig<'posts'> = {
   defaultPopulate: {
     title: true,
     slug: true,
-    categories: true,
+    tags: true,
     meta: {
       image: true,
       description: true,
@@ -93,6 +94,7 @@ export const Posts: CollectionConfig<'posts'> = {
                     FixedToolbarFeature(),
                     InlineToolbarFeature(),
                     HorizontalRuleFeature(),
+                    InlineCodeFeature(),
                   ]
                 },
               }),
@@ -121,13 +123,21 @@ export const Posts: CollectionConfig<'posts'> = {
               relationTo: 'posts',
             },
             {
-              name: 'categories',
+              name: 'coverImage',
+              type: 'relationship',
+              admin: {
+                position: 'sidebar',
+              },
+              relationTo: 'media' as const,
+            },
+            {
+              name: 'tags',
               type: 'relationship',
               admin: {
                 position: 'sidebar',
               },
               hasMany: true,
-              relationTo: 'categories',
+              relationTo: 'tags' as const,
             },
           ],
           label: 'Meta',
