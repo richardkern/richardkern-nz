@@ -37,5 +37,6 @@
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit"
     }
-  }
+  },
+  "terminal.integrated.suggest.suggestOnTriggerCharacters": true
 }
