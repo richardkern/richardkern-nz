@@ -38,5 +38,10 @@
       "source.fixAll.eslint": "explicit"
     }
   },
-  "terminal.integrated.suggest.suggestOnTriggerCharacters": true
+  "terminal.integrated.suggest.suggestOnTriggerCharacters": true,
+  "css.validate": false,
+  "scss.validate": false,
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
 }
