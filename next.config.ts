@@ -44,6 +44,9 @@ const nextConfig: NextConfig = {
 
     return webpackConfig
   },
+  logging: {
+    browserToTerminal: true,
+  },
   reactStrictMode: true,
   redirects,
   turbopack: {
