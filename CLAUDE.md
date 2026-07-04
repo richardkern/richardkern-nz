@@ -40,8 +40,8 @@ If the database needs a clean reset: `docker compose down -v && docker compose u
 
 ```
 /                    custom homepage (sidebar layout, dark)
-/blog                post index
-/blog/[slug]         individual post
+/posts               post index (scaffolded path; decide /posts vs /blog before launch)
+/posts/[slug]        individual post
 /work                projects index
 /work/[slug]         individual project
 /[slug]              CMS-managed pages (e.g. /about)
