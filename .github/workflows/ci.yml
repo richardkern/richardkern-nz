@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm exec tsc --noEmit
+
+# A build job is deliberately absent. Building Payload + Postgres needs a live
+# database and a migrations workflow; dev currently uses schema push, so there
+# is nothing for CI to migrate. Add a build job with a postgres service once
+# the migrations story exists. That same work is required before the first
+# Coolify production deploy, so it lands as part of pre-launch, not here.

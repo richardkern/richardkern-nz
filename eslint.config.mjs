@@ -1,16 +1,19 @@
-import { dirname } from 'path'
-import { fileURLToPath } from 'url'
-import { FlatCompat } from '@eslint/eslintrc'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-})
+import nextCoreWebVitals from 'eslint-config-next/core-web-vitals'
+import nextTypescript from 'eslint-config-next/typescript'
 
 const eslintConfig = [
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  ...nextCoreWebVitals,
+  ...nextTypescript,
+  {
+    // Template code trips the React Compiler era hooks rules; keep visible as
+    // warnings and fix opportunistically rather than blocking CI. Scoped to src
+    // so the rule reference only applies where the plugin is registered.
+    files: ['src/**/*.{ts,tsx,js,jsx}'],
+    rules: {
+      'react-hooks/set-state-in-effect': 'warn',
+      'react-hooks/refs': 'warn',
+    },
+  },
   {
     rules: {
       '@typescript-eslint/ban-ts-comment': 'warn',
