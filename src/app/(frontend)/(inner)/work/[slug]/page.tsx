@@ -3,8 +3,8 @@ import type { Metadata } from 'next'
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
-import React, { cache } from 'react'
 import Link from 'next/link'
+import React, { cache } from 'react'
 
 import { Media } from '@/components/Media'
 import RichText from '@/components/RichText'
@@ -39,34 +39,39 @@ export default async function ProjectPage({ params: paramsPromise }: Args) {
 
   if (!project) return <PayloadRedirects url={url} />
 
+  const tech = (project.tech ?? []).map((t) => t.label).join(' · ')
+  const gallery = (project.images ?? []).filter(
+    (item) => item.image && typeof item.image === 'object',
+  )
+
   return (
-    <article className="pt-16 pb-16">
+    <article className="mx-auto w-full max-w-220 px-6 pt-12 pb-16 md:pt-17 md:pb-19">
       <PayloadRedirects disableNotFound url={url} />
 
-      <div className="container mb-8">
-        {project.coverImage && typeof project.coverImage !== 'number' && (
-          <div className="relative w-full aspect-video mb-8 overflow-hidden rounded-lg">
-            <Media resource={project.coverImage} imgClassName="object-cover w-full h-full" />
-          </div>
+      <p className="font-mono text-[12px] text-haze">
+        {project.year}
+        {tech && (
+          <>
+            <span aria-hidden="true"> &nbsp;·&nbsp; </span>
+            {tech}
+          </>
         )}
+      </p>
 
-        <div className="prose dark:prose-invert max-w-3xl">
-          <h1>{project.title}</h1>
-          {project.description && <p className="lead">{project.description}</p>}
-        </div>
+      <h1 className="mt-3.5 font-display text-[34px] leading-[1.05] font-bold tracking-[-0.03em] text-ink md:text-[44px]">
+        {project.title}
+      </h1>
 
-        <div className="flex gap-6 mt-4 text-sm flex-wrap items-center">
-          {project.year && (
-            <span className="text-muted-foreground">{project.year}</span>
-          )}
+      {(project.url || project.repoUrl) && (
+        <div className="mt-5 flex flex-wrap gap-6">
           {project.url && (
             <a
               href={project.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="underline"
+              className="font-sans text-[13.5px] font-medium text-fern hover:underline"
             >
-              Live site ↗
+              Live site <span aria-hidden="true">↗</span>
             </a>
           )}
           {project.repoUrl && (
@@ -74,39 +79,47 @@ export default async function ProjectPage({ params: paramsPromise }: Args) {
               href={project.repoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="underline"
+              className="font-sans text-[13.5px] font-medium text-fern hover:underline"
             >
-              Repository ↗
+              Repository <span aria-hidden="true">↗</span>
             </a>
           )}
         </div>
-
-        {project.tech && project.tech.length > 0 && (
-          <div className="flex gap-2 mt-4 flex-wrap">
-            {project.tech.map((t, i) => (
-              <span key={i} className="text-xs border border-border rounded px-2 py-1">
-                {t.label}
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
+      )}
 
       {project.longDescription && (
-        <div className="container">
+        <div className="mt-9 max-w-[68ch] md:mt-11">
           <RichText
-            className="max-w-3xl"
             data={project.longDescription}
             enableGutter={false}
+            className="prose-p:text-[18px]"
           />
         </div>
       )}
 
-      <div className="container mt-12">
-        <Link href="/work" className="underline text-sm">
+      {gallery.length > 0 && (
+        <div className="mt-9 grid gap-6 md:mt-11 md:grid-cols-2">
+          {gallery.map((item, i) => (
+            <div
+              key={i}
+              className="relative aspect-16/10 overflow-hidden border border-rule bg-hairline"
+            >
+              <Media
+                resource={item.image}
+                fill
+                imgClassName="object-cover"
+                size="(max-width: 768px) 100vw, 420px"
+              />
+            </div>
+          ))}
+        </div>
+      )}
+
+      <p className="mt-10">
+        <Link href="/work" className="font-sans text-[13px] font-medium text-fern hover:underline">
           ← All work
         </Link>
-      </div>
+      </p>
     </article>
   )
 }

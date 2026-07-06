@@ -1,28 +1,20 @@
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
-import React from 'react'
 import Link from 'next/link'
-import { Github, Linkedin, Mail } from 'lucide-react'
+import React from 'react'
 
-import { formatDateTime } from '@/utilities/formatDateTime'
+import { SocialGlyphs } from '@/components/site/socialLinks'
+import { Wordmark } from '@/components/site/Wordmark'
+import { formatEntryNo, formatLogDate, getPostNumbers } from '@/utilities/logbook'
+import { DEFAULT_NAV } from '@/utilities/navLinks'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
 
-const PLATFORM_ICONS: Record<
-  string,
-  React.ComponentType<{ className?: string; strokeWidth?: number }>
-> = {
-  github: Github,
-  linkedin: Linkedin,
-  email: Mail,
-  mail: Mail,
-}
-
 export default async function HomePage() {
   const payload = await getPayload({ config: configPromise })
 
-  const [siteSettings, postsResult, projectsResult] = await Promise.all([
+  const [siteSettings, postsResult, projectsResult, postNumbers] = await Promise.all([
     payload.findGlobal({
       slug: 'site-settings',
       select: { bio: true, socialLinks: true },
@@ -31,6 +23,7 @@ export default async function HomePage() {
       collection: 'posts',
       depth: 0,
       limit: 3,
+      draft: false,
       overrideAccess: false,
       sort: '-publishedAt',
       select: { title: true, slug: true, publishedAt: true },
@@ -44,169 +37,146 @@ export default async function HomePage() {
       where: { featured: { equals: true } },
       select: { title: true, slug: true, description: true, year: true },
     }),
+    getPostNumbers(),
   ])
 
   const bio = siteSettings?.bio
   const socialLinks = siteSettings?.socialLinks ?? []
-  const recentPosts = postsResult.docs
-  const featuredProjects = projectsResult.docs
+  const posts = postsResult.docs
+  const projects = projectsResult.docs
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#111] text-[#e5e5e5] font-sans flex overflow-hidden">
-      {/* ── Sidebar ── */}
-      <aside className="w-52 shrink-0 flex flex-col px-8 py-10 border-r border-white/[0.07] h-full">
-        {/* Nav */}
-        <nav className="flex flex-col gap-5">
-          <Link
-            href="/"
-            className="text-[11px] uppercase tracking-[0.18em] underline underline-offset-4 decoration-white/40"
-          >
-            Home
-          </Link>
-          <Link
-            href="/posts"
-            className="text-[11px] uppercase tracking-[0.18em] text-[#e5e5e5]/50 hover:text-[#e5e5e5] transition-colors"
-          >
-            Blog
-          </Link>
-          <Link
-            href="/work"
-            className="text-[11px] uppercase tracking-[0.18em] text-[#e5e5e5]/50 hover:text-[#e5e5e5] transition-colors"
-          >
-            Work
-          </Link>
-        </nav>
+    <div className="flex flex-1 flex-col md:flex-row">
+      {/* Mobile: the spine collapses to a charcoal top bar (mock 6a) */}
+      <div
+        data-surface="charcoal"
+        className="flex items-center justify-between bg-charcoal px-5 py-3 md:hidden"
+      >
+        <Link href="/" aria-label="richardkern.nz — home">
+          <Wordmark surface="charcoal" className="text-[13px]" />
+        </Link>
+        <div className="flex gap-2">
+          <SocialGlyphs links={socialLinks} className="size-7 text-[9px]" />
+        </div>
+      </div>
 
-        {/* Social icons */}
-        {socialLinks.length > 0 && (
-          <div className="flex gap-4 mt-10">
-            {socialLinks.map((link, i) => {
-              const Icon = PLATFORM_ICONS[link.platform.toLowerCase()]
-              if (!Icon) return null
-              return (
-                <a
-                  key={i}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[#e5e5e5]/40 hover:text-[#e5e5e5] transition-colors"
-                  aria-label={link.platform}
-                >
-                  <Icon className="w-3.75 h-3.75" strokeWidth={1.5} />
-                </a>
-              )
-            })}
-          </div>
-        )}
-
-        {/* Copyright */}
-        <p className="mt-auto text-[10px] tracking-wide text-[#e5e5e5]/25">© Richard Kern</p>
+      {/* Desktop: the notebook spine — vertical wordmark, socials pinned at the foot */}
+      <aside
+        data-surface="charcoal"
+        className="hidden w-21.5 flex-none flex-col items-center bg-charcoal pt-7.5 pb-6 md:flex"
+      >
+        <div className="flex flex-1 items-start justify-center">
+          <span className="rotate-180 [writing-mode:vertical-rl]">
+            <Wordmark surface="charcoal" className="text-[13px]" />
+          </span>
+        </div>
+        <div className="flex flex-col gap-2.5">
+          <SocialGlyphs links={socialLinks} />
+        </div>
       </aside>
 
-      {/* ── Main ── */}
-      <main className="flex-1 overflow-y-auto px-14 py-10 lg:px-20">
-        {/* Name */}
-        <h1 className="text-[clamp(3rem,7.5vw,8.5rem)] font-thin tracking-tight leading-[0.88] text-[#e5e5e5] mb-5">
-          RICHARD
-          <br />
-          KERN
-        </h1>
+      <main className="flex flex-1 flex-col px-6 pt-6 pb-11 md:px-12 md:pt-11 md:pb-12 lg:pr-24 lg:pl-26">
+        <nav className="flex gap-6.5 md:justify-end md:gap-8.5">
+          {DEFAULT_NAV.map(({ label, href }) => (
+            <Link
+              key={href}
+              href={href}
+              className="-my-2 py-2 font-sans text-[13.5px] font-medium text-ink transition-colors hover:text-fern md:text-[13px]"
+            >
+              {label}
+            </Link>
+          ))}
+        </nav>
 
-        {/* Subtitle */}
-        <p className="text-[11px] uppercase tracking-[0.2em] text-[#e5e5e5]/50 mb-3">
-          Product Manager / Builder
-        </p>
+        <div className="home-reveal mt-10 flex flex-1 flex-col md:mt-19.5">
+          <h1 className="font-display text-[clamp(3.375rem,2.1875rem+5vw,6.75rem)] leading-[0.98] font-bold tracking-[-0.03em] text-ink md:tracking-[-0.035em]">
+            richard
+            <br />
+            kern
+            <span className="text-fern">.</span>
+          </h1>
 
-        {/* Contact */}
-        <p className="text-[12px] text-[#e5e5e5]/35 mb-16">
-          Get in touch at{' '}
-          <a
-            href="mailto:richard@richardkern.nz"
-            className="underline underline-offset-2 decoration-white/20 hover:text-[#e5e5e5]/70 transition-colors"
-          >
-            richard@richardkern.nz
-          </a>
-        </p>
+          {bio && (
+            <p className="mt-5.5 max-w-140 font-serif text-[17px] leading-[1.6] text-ink md:mt-8 md:text-[21px]">
+              {bio}
+            </p>
+          )}
 
-        {/* ── About ── */}
-        {bio && (
-          <section className="mb-14 max-w-lg">
-            <SectionLabel>About Me</SectionLabel>
-            <p className="text-[13px] leading-relaxed text-[#e5e5e5]/70">{bio}</p>
-          </section>
-        )}
-
-        {/* ── Recent Posts ── */}
-        <section className="mb-14 max-w-lg">
-          <SectionLabel>Recent Posts</SectionLabel>
-          {recentPosts.length > 0 ? (
-            <ul>
-              {recentPosts.map((post) => (
-                <li key={post.id} className="border-b border-white/[0.07] last:border-0">
+          <div className="mt-11.5 grid gap-9.5 md:mt-auto md:grid-cols-2 md:gap-16 md:pt-16 lg:gap-24">
+            <section>
+              <SectionLabel>Writing</SectionLabel>
+              {posts.length > 0 ? (
+                posts.map((post) => (
                   <Link
+                    key={post.id}
                     href={`/posts/${post.slug}`}
-                    className="group flex items-baseline justify-between gap-6 py-3"
+                    className="group grid grid-cols-[64px_1fr] gap-3.5 border-b border-hairline py-3.5 md:grid-cols-[96px_1fr] md:gap-4.5"
                   >
-                    <span className="text-[13px] text-[#e5e5e5]/80 group-hover:text-[#e5e5e5] group-hover:underline underline-offset-2 transition-colors">
+                    <span className="font-mono text-[10.5px] leading-[1.9] text-haze md:text-[11px]">
+                      {postNumbers.has(post.id) && (
+                        <>
+                          {formatEntryNo(postNumbers.get(post.id)!)}
+                          <br />
+                        </>
+                      )}
+                      {post.publishedAt && formatLogDate(post.publishedAt, 'day')}
+                    </span>
+                    <span className="self-center font-serif text-[15px] leading-[1.45] text-ink transition-colors group-hover:text-fern md:text-[16px]">
                       {post.title}
                     </span>
-                    {post.publishedAt && (
-                      <span className="text-[11px] text-[#e5e5e5]/30 shrink-0">
-                        {formatDateTime(post.publishedAt)}
-                      </span>
-                    )}
                   </Link>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-[13px] text-[#e5e5e5]/30 py-3">No posts yet.</p>
-          )}
-          <Link
-            href="/posts"
-            className="mt-4 inline-block text-[11px] text-[#e5e5e5]/30 hover:text-[#e5e5e5]/70 tracking-wide transition-colors"
-          >
-            All posts →
-          </Link>
-        </section>
+                ))
+              ) : (
+                <p className="py-3.5 font-serif text-[15px] text-haze">Nothing logged yet.</p>
+              )}
+              <p className="mt-4">
+                <Link
+                  href="/posts"
+                  className="font-sans text-[13px] font-medium text-fern hover:underline"
+                >
+                  Full log →
+                </Link>
+              </p>
+            </section>
 
-        {/* ── Featured Work ── */}
-        <section className="max-w-lg">
-          <SectionLabel>Featured Work</SectionLabel>
-          {featuredProjects.length > 0 ? (
-            <ul>
-              {featuredProjects.map((project) => (
-                <li key={project.id} className="border-b border-white/[0.07] last:border-0">
-                  <Link href={`/work/${project.slug}`} className="group block py-3">
-                    <div className="flex items-baseline justify-between gap-6">
-                      <span className="text-[13px] text-[#e5e5e5]/80 group-hover:text-[#e5e5e5] group-hover:underline underline-offset-2 transition-colors">
+            <section>
+              <SectionLabel>Selected work</SectionLabel>
+              {projects.length > 0 ? (
+                projects.map((project) => (
+                  <Link
+                    key={project.id}
+                    href={`/work/${project.slug}`}
+                    className="group grid grid-cols-[64px_1fr] gap-3.5 border-b border-hairline py-3.5 md:grid-cols-[96px_1fr] md:gap-4.5"
+                  >
+                    <span className="font-mono text-[10.5px] leading-[1.9] text-haze md:text-[11px]">
+                      {project.year}
+                    </span>
+                    <span>
+                      <span className="font-serif text-[15px] leading-[1.45] text-ink transition-colors group-hover:text-fern md:text-[16px]">
                         {project.title}
                       </span>
-                      {project.year && (
-                        <span className="text-[11px] text-[#e5e5e5]/30 shrink-0">
-                          {project.year}
+                      {project.description && (
+                        <span className="mt-0.75 block font-sans text-[12px] leading-normal text-haze md:text-[12.5px]">
+                          {project.description}
                         </span>
                       )}
-                    </div>
-                    {project.description && (
-                      <p className="text-[12px] text-[#e5e5e5]/40 mt-0.5 leading-snug">
-                        {project.description}
-                      </p>
-                    )}
+                    </span>
                   </Link>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-[13px] text-[#e5e5e5]/30 py-3">No featured projects yet.</p>
-          )}
-          <Link
-            href="/work"
-            className="mt-4 inline-block text-[11px] text-[#e5e5e5]/30 hover:text-[#e5e5e5]/70 tracking-wide transition-colors"
-          >
-            All work →
-          </Link>
-        </section>
+                ))
+              ) : (
+                <p className="py-3.5 font-serif text-[15px] text-haze">Nothing to show yet.</p>
+              )}
+              <p className="mt-4">
+                <Link
+                  href="/work"
+                  className="font-sans text-[13px] font-medium text-fern hover:underline"
+                >
+                  All work →
+                </Link>
+              </p>
+            </section>
+          </div>
+        </div>
       </main>
     </div>
   )
@@ -214,8 +184,8 @@ export default async function HomePage() {
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-[10px] uppercase tracking-[0.2em] text-[#e5e5e5]/30 mb-4 border-b border-white/[0.07] pb-2">
+    <h2 className="mb-1 border-b border-rule-strong pb-2.5 font-sans text-[10.5px] font-medium tracking-[0.16em] text-haze uppercase md:text-[11px]">
       {children}
-    </p>
+    </h2>
   )
 }

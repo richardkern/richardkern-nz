@@ -2,8 +2,10 @@ import type { Metadata } from 'next/types'
 
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
-import React from 'react'
 import Link from 'next/link'
+import React from 'react'
+
+import { Media } from '@/components/Media'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
@@ -16,59 +18,63 @@ export default async function Page() {
     depth: 1,
     limit: 100,
     overrideAccess: false,
-    sort: '-year',
+    sort: ['-featured', '-year'],
     select: {
       title: true,
       slug: true,
       description: true,
       year: true,
       tech: true,
+      featured: true,
+      coverImage: true,
     },
   })
 
   return (
-    <div className="pt-24 pb-24">
-      <div className="container mb-16">
-        <div className="prose dark:prose-invert max-w-none">
-          <h1>Work</h1>
-        </div>
-      </div>
+    <div className="mx-auto w-full max-w-[1080px] px-6 pt-12 pb-16 md:pt-[68px] md:pb-[76px]">
+      <h1 className="font-display text-[34px] leading-[1.05] font-bold tracking-[-0.03em] text-ink md:text-[44px]">
+        Work
+      </h1>
 
-      <div className="container">
-        {projects.totalDocs === 0 ? (
-          <p className="text-muted-foreground">No projects yet.</p>
-        ) : (
-          <div className="grid grid-cols-4 sm:grid-cols-8 lg:grid-cols-12 gap-4 lg:gap-8">
-            {projects.docs.map((project) => (
-              <div className="col-span-4" key={project.id}>
-                <Link href={`/work/${project.slug}`}>
-                  <div className="border border-border rounded-lg p-4 hover:bg-card transition-colors">
-                    <h2 className="font-semibold text-lg">{project.title}</h2>
-                    {project.year && (
-                      <p className="text-sm text-muted-foreground mt-1">{project.year}</p>
-                    )}
-                    {project.description && (
-                      <p className="mt-2 text-sm">{project.description}</p>
-                    )}
-                    {project.tech && project.tech.length > 0 && (
-                      <div className="flex gap-2 mt-3 flex-wrap">
-                        {project.tech.map((t, i) => (
-                          <span
-                            key={i}
-                            className="text-xs border border-border rounded px-2 py-0.5"
-                          >
-                            {t.label}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </Link>
+      {projects.totalDocs === 0 ? (
+        <p className="py-10 font-serif text-[17px] text-haze">Nothing to show yet.</p>
+      ) : (
+        <div className="mt-9 grid gap-12 md:mt-11 md:grid-cols-2 md:gap-x-14 md:gap-y-16">
+          {projects.docs.map((project) => (
+            <Link key={project.id} href={`/work/${project.slug}`} className="group block">
+              <div className="relative aspect-[16/10] overflow-hidden border border-rule bg-hairline">
+                {project.coverImage && typeof project.coverImage === 'object' && (
+                  <Media
+                    resource={project.coverImage}
+                    fill
+                    imgClassName="object-cover"
+                    size="(max-width: 768px) 100vw, 512px"
+                  />
+                )}
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+              <div className="mt-4 flex items-baseline justify-between gap-6">
+                <h2 className="font-display text-[19px] leading-[1.2] font-semibold tracking-[-0.02em] text-ink transition-colors group-hover:text-fern md:text-[22px]">
+                  {project.title}
+                </h2>
+                <span className="flex-none font-mono text-[11.5px] text-haze">
+                  {project.year}
+                  {project.featured && ' · featured'}
+                </span>
+              </div>
+              {project.description && (
+                <p className="mt-2 font-sans text-[14px] leading-[1.55] text-haze">
+                  {project.description}
+                </p>
+              )}
+              {project.tech && project.tech.length > 0 && (
+                <p className="mt-2.5 font-mono text-[11.5px] text-fern">
+                  {project.tech.map((t) => t.label).join(' · ')}
+                </p>
+              )}
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
@@ -76,5 +82,6 @@ export default async function Page() {
 export function generateMetadata(): Metadata {
   return {
     title: 'Work',
+    description: 'Things Richard Kern has built — web apps, homelab tooling, and side projects.',
   }
 }

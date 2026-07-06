@@ -19,6 +19,14 @@ export const SiteSettings: GlobalConfig = {
       type: 'textarea',
     },
     {
+      name: 'byline',
+      type: 'text',
+      admin: {
+        description:
+          'One italic line under each post, e.g. "Richard Kern writes about homelab, agents, and running." Falls back to the bio if empty.',
+      },
+    },
+    {
       name: 'socialLinks',
       type: 'array',
       fields: [

@@ -40,7 +40,7 @@ Work proceeds one phase at a time per the vault's `Build Plan` (Phase 00 groundw
 
 - **Header** — inner-page navigation
 - **Footer** — inner-page footer
-- **SiteSettings** — siteTitle, bio, socialLinks (array: platform + url), navConfig
+- **SiteSettings** — siteTitle, bio, byline (post-footer author line), socialLinks (array: platform + url), navConfig
 
 ## Site Routes
 
@@ -51,20 +51,22 @@ Work proceeds one phase at a time per the vault's `Build Plan` (Phase 00 groundw
 /work                projects index (featured first, then year desc)
 /work/[slug]         individual project
 /[slug]              CMS-managed pages (e.g. /about)
-/feed.xml            RSS (Phase 03)
+/feed.xml            RSS
 /admin               Payload admin panel
 ```
 
-To be **removed** in Phase 02: `/search` + search plugin, form-builder plugin, `next/seed`, `@payloadcms/plugin-nested-docs` dependency, template BeforeLogin/BeforeDashboard components. No search, forms, or comments at launch — they're on the Later list, not forgotten.
+De-templating is **done** (2026-07-06): `/search` + search plugin, form-builder plugin, `next/seed`, nested-docs dependency, BeforeLogin/BeforeDashboard, the template theme system (no dark mode — one paper surface), template heros, and shadcn ui leftovers are all removed. No search, forms, or comments at launch — they're on the Later list, not forgotten.
 
-## Design direction — "Cover & Pages" (fixed)
+## Design direction — "Cover & Pages" with a logbook layer (fixed, revised 2026-07-06)
 
-Full intent in the vault `Design Spec`; its Fixed / Implementer's-choice boundary governs. The short version:
+Full intent in the vault `Design Spec` (revised 2026-07-06) and `Design Decisions - 2026-07-06`; the Fixed / Implementer's-choice boundary governs. The short version:
 
 - One paper surface throughout. Charcoal appears only where the site is structural or technical: the homepage spine rail, code blocks, and the footer. That's the signature move — don't add competing devices.
-- Palette: Charcoal `#14181D`, Paper `#F7F6F2`, Ink `#1F242B`, Fern `#2A5A43` (accent), Haze `#6E7681` (muted, large sizes only — adjust per surface to pass AA).
-- Type: Bricolage Grotesque (display), Source Serif 4 (long-form body), Geist Sans (UI), Geist Mono (code). Load via `next/font`.
-- Homepage: paper with a persistent ~85px charcoal spine (monogram, vertical wordmark, social links); slim charcoal top bar on mobile. No Header/Footer on `/`.
+- The logbook layer: everything *about* an entry (N°, dates, tech, filenames) is small Geist Mono; everything *in* an entry is serif. Entry N° is real — chronological published-post position (`src/utilities/logbook.ts`).
+- Palette: Bush Charcoal `#171B16`, Paper `#F7F5EF`, Ink `#22261F`, Fern `#2A5A43` (accent on paper), Moss `#8FB8A5` (accent on charcoal — fern fails AA there), Haze `#5E6459` (muted on paper). Tokens live in `globals.css` `@theme`.
+- Type: Schibsted Grotesk (display — Bricolage was dropped 2026-07-06), Source Serif 4 (long-form body), Geist Sans (UI), Geist Mono (code + the logbook layer). Loaded via `next/font`.
+- Wordmark, no monogram: `richardkern.nz` in Geist Mono 500 lowercase, `.nz` fern on paper / moss on charcoal (16px header, 12.5px footer, 13px vertical on the spine).
+- Homepage: paper with a persistent 86px charcoal spine (vertical wordmark, circled mono social glyphs); charcoal top bar on mobile. No Header/Footer on `/` — inner pages use the `(inner)` route group's chrome.
 - Tone: consistently beautiful, slightly understated. The web-design-standards skill's hard bans and end-of-build checklist apply to all frontend work.
 
 ## Conventions
@@ -99,8 +101,7 @@ Full intent in the vault `Design Spec`; its Fixed / Implementer's-choice boundar
 
 - VS Code's built-in CSS validator throws false errors on Tailwind v4 directives (`@theme`, `@source`, `@plugin`, `@variant`). This is suppressed via `.vscode/settings.json` (`css.validate: false`, `scss.validate: false`). The CSS is correct — do not remove these directives.
 - Tailwind IntelliSense may suggest canonical class rewrites (e.g. `min-h-[100vh]` → `min-h-screen`). These are style suggestions, not errors. Fix opportunistically, not urgently.
-- When making schema changes in dev, Payload runs an interactive migration prompt on next `pnpm dev`. If it errors on a constraint that doesn't exist, wipe the database with `docker compose down -v && docker compose up -d`.
-- The seoPlugin's `generateTitle` still says "Payload Website Template" and `generateURL` doesn't know the `/posts/` and `/work/` prefixes — fixed in Phase 02; don't ship metadata before that lands.
+- When making schema changes in dev, Payload runs an interactive migration prompt on next `pnpm dev`. If it errors on a constraint that doesn't exist, wipe the database with `docker compose down -v && docker compose up -d`, then reseed dev content with `./node_modules/.bin/tsx scripts/seed-dev.ts` (creates admin user <richard.kern@gmail.com> / localpassword — dev only).
 
 ## Source of truth (vault: `30 - Projects/Personal Site/`)
 
