@@ -1,0 +1,21 @@
+.git
+.github
+.next
+node_modules
+.env
+.env.*
+test.env
+public/media
+test-results
+playwright-report
+blob-report
+playwright
+tests
+.claude
+.vscode
+.DS_Store
+*.tsbuildinfo
+Personal Site Design-handoff.zip
+README.md
+AGENTS.md
+CLAUDE.md

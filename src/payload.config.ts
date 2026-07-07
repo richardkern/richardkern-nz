@@ -55,6 +55,9 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
+    // Dev uses schema push (Payload default); staging/production run these
+    // migrations during the deploy build. See AGENTS.md "Conventions".
+    migrationDir: path.resolve(dirname, 'migrations'),
   }),
   collections: [Pages, Posts, Projects, Media, Tags, Users],
   cors: [getServerSideURL()].filter(Boolean),

@@ -24,7 +24,7 @@ Rejected alternatives and reasoning: `Personal Site Stack Decisions` in the vaul
 
 ## Workflow
 
-- Not yet wired to Coolify; commits currently land on `main`. Once the deploy pipeline exists (Phase 01), match Westgate's pattern: build on `develop`, PR to `main`.
+- Branching matches Westgate's pattern: build on `develop`, PR to `main`. Coolify wiring is in progress (Phase 01, started 2026-07-07): `develop` → staging, `main` → production.
 - Work proceeds one phase at a time per the vault's `Build Plan` (Phase 00 groundwork → 01 deploy pipeline → 02 schema/de-templating → 03 frontend → 04 editor workflow → 05 content/go-live → 06 care). Each session updates its phase note's checkboxes in `30 - Projects/Personal Site/Phases/`. Don't pull work forward from a later phase; scope creep goes to the Build Plan's Later list.
 - Session protocol: at the start of a work session, read the two or three most recent logs in the vault's `90 - Meta/Sessions/`; at the end, write one using the Session Log template there. Full protocol in the vault's `CLAUDE.md`.
 
@@ -77,8 +77,8 @@ Full intent in the vault `Design Spec` (revised 2026-07-06) and `Design Decision
 - Never rely on middleware as the sole auth enforcement layer
 - Access control: public read of published docs only; authenticated create/update; drafts must never leak through frontend queries
 - Media uploads go through the Media collection (R2 in production) — never to the repo or public/
-- After schema changes: `pnpm generate:types` (never edit `payload-types.ts`)
-- Production and CI use real Payload migrations; local dev may schema-push (Phase 01 sets this up)
+- After schema changes: `pnpm generate:types` (never edit `payload-types.ts`), then `pnpm migrate:create <name>` to generate a migration into `src/migrations` (this script routes through tsx — the plain `payload migrate:create` bin crashes in this repo; `pnpm migrate` and `pnpm migrate:status` work fine as-is)
+- Local dev schema-pushes (Payload default); staging/production/CI run real migrations. The deploy build (Dockerfile builder stage) runs `pnpm migrate && pnpm build` — the build needs a live database regardless because pages statically generate via the Local API. Never run `pnpm migrate` against the schema-pushed local dev database; it will fail on existing tables (CI and fresh databases are fine)
 - Seeds run via `./node_modules/.bin/tsx scripts/seed-dev.ts` (`payload run` exits silently in this repo; the script loads dotenv itself). Pass `context: { disableRevalidate: true }` on every Local API write outside Next, or the revalidate hooks throw.
 
 ## Environment variables (names + sources, no values)
