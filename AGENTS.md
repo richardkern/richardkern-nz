@@ -14,7 +14,7 @@ richardkern.nz — Richard's personal site: a blog covering both technical mater
 | CMS | Payload CMS 3.x |
 | Database | PostgreSQL 17 (local dev: port 5432, db `richardkern-nz`, password `localpassword`) |
 | Styling | Tailwind 4 + shadcn/ui |
-| Package manager | pnpm 11 — install with `pnpm ii` (`--ignore-workspace`), never plain `pnpm install` in this repo |
+| Package manager | pnpm 11 — install with `pnpm ii` (now just plain `pnpm install`; the old `--ignore-workspace` form skipped `pnpm-workspace.yaml`'s `allowBuilds` and `overrides` and silently stripped the security floors from the lockfile — fixed 2026-07-07, same lesson as Westgate) |
 | Runtime | Node.js 24+ |
 | Media | Local disk in dev; Cloudflare R2 in production |
 | Hosting | VPS via Coolify: push `main` → production, `develop` → staging |

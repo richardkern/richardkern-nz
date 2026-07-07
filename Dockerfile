@@ -11,10 +11,6 @@ WORKDIR /app
 
 FROM base AS deps
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-# Plain install, like CI: the image is isolated so the local `pnpm ii`
-# (--ignore-workspace) rule doesn't apply — and it must NOT be used here,
-# since ignoring pnpm-workspace.yaml drops its overrides and fails the
-# frozen-lockfile check.
 RUN pnpm install --frozen-lockfile
 
 FROM base AS builder
