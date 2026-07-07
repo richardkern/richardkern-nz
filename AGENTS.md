@@ -91,6 +91,7 @@ Full intent in the vault `Design Spec` (revised 2026-07-06) and `Design Decision
 | `CRON_SECRET` | generated per environment (Payload jobs endpoint) |
 | `NEXT_PUBLIC_SERVER_URL` | per environment (localhost:3000 / staging domain / richardkern.nz) |
 | `R2_BUCKET`, `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` | Cloudflare R2 dashboard (production/staging only; dev uses local disk) |
+| `RESEND_API_KEY` | Resend dashboard (staging/production; when unset, Payload logs emails to the console — dev default) |
 
 ## Common commands
 
