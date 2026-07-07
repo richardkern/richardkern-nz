@@ -1,4 +1,5 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { resendAdapter } from '@payloadcms/email-resend'
 import sharp from 'sharp'
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
@@ -55,12 +56,25 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
+    // Dev uses schema push (Payload default); staging/production run these
+    // migrations during the deploy build. See AGENTS.md "Conventions".
+    migrationDir: path.resolve(dirname, 'migrations'),
   }),
   collections: [Pages, Posts, Projects, Media, Tags, Users],
   cors: [getServerSideURL()].filter(Boolean),
+  // Real email only when the key is present (staging/production); without it
+  // Payload falls back to logging emails to the console, which is what dev wants.
+  email: process.env.RESEND_API_KEY
+    ? resendAdapter({
+        defaultFromAddress: 'noreply@richardkern.nz',
+        defaultFromName: 'Richard Kern',
+        apiKey: process.env.RESEND_API_KEY,
+      })
+    : undefined,
   globals: [Header, Footer, SiteSettings],
   plugins,
   secret: process.env.PAYLOAD_SECRET,
+  serverURL: getServerSideURL(),
   sharp,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),

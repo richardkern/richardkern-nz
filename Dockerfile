@@ -1,71 +1,62 @@
-# To use this Dockerfile, you have to set `output: 'standalone'` in your next.config.js file.
-# From https://github.com/vercel/next.js/blob/canary/examples/with-docker/Dockerfile
+# Deploy image for Coolify (staging and production).
+#
+# The builder stage needs a reachable Postgres: `payload migrate` runs first,
+# then `next build` statically generates pages via the Payload Local API.
+# In Coolify, mark DATABASE_URL / PAYLOAD_SECRET / CRON_SECRET /
+# NEXT_PUBLIC_SERVER_URL as build-time variables so they arrive as build args.
 
 FROM node:24-alpine AS base
+RUN apk add --no-cache libc6-compat && npm install -g pnpm@11
+WORKDIR /app
 
-# Install dependencies only when needed
 FROM base AS deps
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat
-WORKDIR /app
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+RUN pnpm install --frozen-lockfile
 
-# Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
-
-
-# Rebuild the source code only when needed
 FROM base AS builder
-WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the build.
-# ENV NEXT_TELEMETRY_DISABLED 1
+ARG DATABASE_URL
+ARG PAYLOAD_SECRET
+ARG CRON_SECRET
+ARG NEXT_PUBLIC_SERVER_URL
+# R2 vars keep the build-time Payload config identical to runtime
+# (media collection storage switches on when all four are present)
+ARG R2_BUCKET
+ARG R2_ACCOUNT_ID
+ARG R2_ACCESS_KEY_ID
+ARG R2_SECRET_ACCESS_KEY
+ENV DATABASE_URL=$DATABASE_URL \
+    PAYLOAD_SECRET=$PAYLOAD_SECRET \
+    CRON_SECRET=$CRON_SECRET \
+    NEXT_PUBLIC_SERVER_URL=$NEXT_PUBLIC_SERVER_URL \
+    R2_BUCKET=$R2_BUCKET \
+    R2_ACCOUNT_ID=$R2_ACCOUNT_ID \
+    R2_ACCESS_KEY_ID=$R2_ACCESS_KEY_ID \
+    R2_SECRET_ACCESS_KEY=$R2_SECRET_ACCESS_KEY \
+    NODE_ENV=production \
+    NEXT_TELEMETRY_DISABLED=1
 
-RUN \
-  if [ -f yarn.lock ]; then yarn run build; \
-  elif [ -f package-lock.json ]; then npm run build; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
+RUN pnpm migrate && pnpm build
 
-# Production image, copy all the files and run next
 FROM base AS runner
-WORKDIR /app
+ENV NODE_ENV=production \
+    NEXT_TELEMETRY_DISABLED=1 \
+    PORT=3000 \
+    HOSTNAME=0.0.0.0
 
-ENV NODE_ENV production
-# Uncomment the following line in case you want to disable telemetry during runtime.
-# ENV NEXT_TELEMETRY_DISABLED 1
+# Not a standalone build: `next start` loads next.config.ts (which imports
+# redirects.ts) and serves from .next, so the full node_modules comes along.
+COPY --from=builder --chown=node:node /app/package.json ./package.json
+COPY --from=builder --chown=node:node /app/next.config.ts ./next.config.ts
+COPY --from=builder --chown=node:node /app/redirects.ts ./redirects.ts
+COPY --from=builder --chown=node:node /app/tsconfig.json ./tsconfig.json
+COPY --from=builder --chown=node:node /app/node_modules ./node_modules
+COPY --from=builder --chown=node:node /app/public ./public
+COPY --from=builder --chown=node:node /app/.next ./.next
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-# Remove this line if you do not have this folder
-COPY --from=builder /app/public ./public
-
-# Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
-
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-USER nextjs
-
+USER node
 EXPOSE 3000
 
-ENV PORT 3000
-
-# server.js is created by next build from the standalone output
-# https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD HOSTNAME="0.0.0.0" node server.js
+CMD ["./node_modules/.bin/next", "start"]

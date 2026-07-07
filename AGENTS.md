@@ -14,7 +14,7 @@ richardkern.nz — Richard's personal site: a blog covering both technical mater
 | CMS | Payload CMS 3.x |
 | Database | PostgreSQL 17 (local dev: port 5432, db `richardkern-nz`, password `localpassword`) |
 | Styling | Tailwind 4 + shadcn/ui |
-| Package manager | pnpm 11 — install with `pnpm ii` (`--ignore-workspace`), never plain `pnpm install` in this repo |
+| Package manager | pnpm 11 — install with `pnpm ii` (now just plain `pnpm install`; the old `--ignore-workspace` form skipped `pnpm-workspace.yaml`'s `allowBuilds` and `overrides` and silently stripped the security floors from the lockfile — fixed 2026-07-07, same lesson as Westgate) |
 | Runtime | Node.js 24+ |
 | Media | Local disk in dev; Cloudflare R2 in production |
 | Hosting | VPS via Coolify: push `main` → production, `develop` → staging |
@@ -24,7 +24,7 @@ Rejected alternatives and reasoning: `Personal Site Stack Decisions` in the vaul
 
 ## Workflow
 
-- Not yet wired to Coolify; commits currently land on `main`. Once the deploy pipeline exists (Phase 01), match Westgate's pattern: build on `develop`, PR to `main`.
+- Branching matches Westgate's pattern: build on `develop`, PR to `main`. Coolify wiring is in progress (Phase 01, started 2026-07-07): `develop` → staging, `main` → production.
 - Work proceeds one phase at a time per the vault's `Build Plan` (Phase 00 groundwork → 01 deploy pipeline → 02 schema/de-templating → 03 frontend → 04 editor workflow → 05 content/go-live → 06 care). Each session updates its phase note's checkboxes in `30 - Projects/Personal Site/Phases/`. Don't pull work forward from a later phase; scope creep goes to the Build Plan's Later list.
 - Session protocol: at the start of a work session, read the two or three most recent logs in the vault's `90 - Meta/Sessions/`; at the end, write one using the Session Log template there. Full protocol in the vault's `CLAUDE.md`.
 
@@ -76,9 +76,10 @@ Full intent in the vault `Design Spec` (revised 2026-07-06) and `Design Decision
 - Route handlers (`app/api/...`) for mutations, not Server Actions, for anything security-relevant
 - Never rely on middleware as the sole auth enforcement layer
 - Access control: public read of published docs only; authenticated create/update; drafts must never leak through frontend queries
-- Media uploads go through the Media collection (R2 in production) — never to the repo or public/
-- After schema changes: `pnpm generate:types` (never edit `payload-types.ts`)
-- Production and CI use real Payload migrations; local dev may schema-push (Phase 01 sets this up)
+- Media uploads go through the Media collection (R2 in production) — never to the repo or public/. R2 storage (`s3Storage` in `src/plugins`) switches on when all four `R2_*` env vars are present and stays on local disk otherwise; it deliberately sets no `prefix` option, because that would add a media column and the schema must stay identical whether the plugin is enabled or not
+- After schema changes: `pnpm generate:types` (never edit `payload-types.ts`), then `pnpm migrate:create <name>` to generate a migration into `src/migrations`
+- After adding/removing a Payload plugin or any admin component: `pnpm generate:importmap` and commit the regenerated `importMap.js`. Dev regenerates the map on startup so a stale map is invisible locally, but production builds use the committed file and the entire admin renders as a blank page with no client-side error (the only trace is a `getFromImportMap` warning in the server log) — this blanked staging on 2026-07-07 after the R2 plugin was added (this script routes through tsx — the plain `payload migrate:create` bin crashes in this repo; `pnpm migrate` and `pnpm migrate:status` work fine as-is)
+- Local dev schema-pushes (Payload default); staging/production/CI run real migrations. The deploy build (Dockerfile builder stage) runs `pnpm migrate && pnpm build` — the build needs a live database regardless because pages statically generate via the Local API. Never run `pnpm migrate` against the schema-pushed local dev database; it will fail on existing tables (CI and fresh databases are fine)
 - Seeds run via `./node_modules/.bin/tsx scripts/seed-dev.ts` (`payload run` exits silently in this repo; the script loads dotenv itself). Pass `context: { disableRevalidate: true }` on every Local API write outside Next, or the revalidate hooks throw.
 
 ## Environment variables (names + sources, no values)
@@ -90,6 +91,7 @@ Full intent in the vault `Design Spec` (revised 2026-07-06) and `Design Decision
 | `CRON_SECRET` | generated per environment (Payload jobs endpoint) |
 | `NEXT_PUBLIC_SERVER_URL` | per environment (localhost:3000 / staging domain / richardkern.nz) |
 | `R2_BUCKET`, `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` | Cloudflare R2 dashboard (production/staging only; dev uses local disk) |
+| `RESEND_API_KEY` | Resend dashboard (staging/production; when unset, Payload logs emails to the console — dev default) |
 
 ## Common commands
 
