@@ -92,7 +92,7 @@ export const SocialTextLinks: React.FC<{
             href={hrefFor(link)}
             {...(email ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
             className={cn(
-              'font-sans text-[13.5px] font-medium text-fern hover:underline hover:underline-offset-3',
+              'font-sans text-[13.5px] font-medium text-accent hover:underline hover:underline-offset-3',
               className,
             )}
           >

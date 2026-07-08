@@ -48,7 +48,7 @@ export default async function ProjectPage({ params: paramsPromise }: Args) {
     <article className="mx-auto w-full max-w-220 px-6 pt-12 pb-16 md:pt-17 md:pb-19">
       <PayloadRedirects disableNotFound url={url} />
 
-      <p className="font-mono text-[12px] text-haze">
+      <p className="font-mono text-[12px] text-muted">
         {project.year}
         {tech && (
           <>
@@ -58,7 +58,7 @@ export default async function ProjectPage({ params: paramsPromise }: Args) {
         )}
       </p>
 
-      <h1 className="mt-3.5 font-display text-[34px] leading-[1.05] font-bold tracking-[-0.03em] text-ink md:text-[44px]">
+      <h1 className="mt-3.5 font-display text-[34px] leading-[1.05] font-bold tracking-[-0.03em] text-body md:text-[44px]">
         {project.title}
       </h1>
 
@@ -69,7 +69,7 @@ export default async function ProjectPage({ params: paramsPromise }: Args) {
               href={project.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-sans text-[13.5px] font-medium text-fern hover:underline"
+              className="font-sans text-[13.5px] font-medium text-accent hover:underline"
             >
               Live site <span aria-hidden="true">↗</span>
             </a>
@@ -79,7 +79,7 @@ export default async function ProjectPage({ params: paramsPromise }: Args) {
               href={project.repoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-sans text-[13.5px] font-medium text-fern hover:underline"
+              className="font-sans text-[13.5px] font-medium text-accent hover:underline"
             >
               Repository <span aria-hidden="true">↗</span>
             </a>
@@ -116,7 +116,7 @@ export default async function ProjectPage({ params: paramsPromise }: Args) {
       )}
 
       <p className="mt-10">
-        <Link href="/work" className="font-sans text-[13px] font-medium text-fern hover:underline">
+        <Link href="/work" className="font-sans text-[13px] font-medium text-accent hover:underline">
           ← All work
         </Link>
       </p>

@@ -32,12 +32,12 @@ export default async function Page() {
 
   return (
     <div className="mx-auto w-full max-w-[1080px] px-6 pt-12 pb-16 md:pt-[68px] md:pb-[76px]">
-      <h1 className="font-display text-[34px] leading-[1.05] font-bold tracking-[-0.03em] text-ink md:text-[44px]">
+      <h1 className="font-display text-[34px] leading-[1.05] font-bold tracking-[-0.03em] text-body md:text-[44px]">
         Work
       </h1>
 
       {projects.totalDocs === 0 ? (
-        <p className="py-10 font-serif text-[17px] text-haze">Nothing to show yet.</p>
+        <p className="py-10 font-serif text-[17px] text-muted">Nothing to show yet.</p>
       ) : (
         <div className="mt-9 grid gap-12 md:mt-11 md:grid-cols-2 md:gap-x-14 md:gap-y-16">
           {projects.docs.map((project) => (
@@ -53,21 +53,21 @@ export default async function Page() {
                 )}
               </div>
               <div className="mt-4 flex items-baseline justify-between gap-6">
-                <h2 className="font-display text-[19px] leading-[1.2] font-semibold tracking-[-0.02em] text-ink transition-colors group-hover:text-fern md:text-[22px]">
+                <h2 className="font-display text-[19px] leading-[1.2] font-semibold tracking-[-0.02em] text-body transition-colors group-hover:text-accent md:text-[22px]">
                   {project.title}
                 </h2>
-                <span className="flex-none font-mono text-[11.5px] text-haze">
+                <span className="flex-none font-mono text-[11.5px] text-muted">
                   {project.year}
                   {project.featured && ' · featured'}
                 </span>
               </div>
               {project.description && (
-                <p className="mt-2 font-sans text-[14px] leading-[1.55] text-haze">
+                <p className="mt-2 font-sans text-[14px] leading-[1.55] text-muted">
                   {project.description}
                 </p>
               )}
               {project.tech && project.tech.length > 0 && (
-                <p className="mt-2.5 font-mono text-[11.5px] text-fern">
+                <p className="mt-2.5 font-mono text-[11.5px] text-accent">
                   {project.tech.map((t) => t.label).join(' · ')}
                 </p>
               )}

@@ -67,7 +67,7 @@ export default async function Page({ params: paramsPromise }: Args) {
 
       {draft && <LivePreviewListener />}
 
-      <h1 className="mb-9 font-display text-[34px] leading-[1.05] font-bold tracking-[-0.03em] text-ink md:text-[44px]">
+      <h1 className="mb-9 font-display text-[34px] leading-[1.05] font-bold tracking-[-0.03em] text-body md:text-[44px]">
         {page.title}
       </h1>
 

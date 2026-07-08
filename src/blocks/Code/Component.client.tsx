@@ -44,7 +44,7 @@ export const Code: React.FC<Props> = ({ code, language = '', filename }) => {
   if (!code) return null
 
   return (
-    <div data-surface="charcoal" className="rounded-md bg-charcoal px-7 py-6">
+    <div data-surface="charcoal" className="rounded-md bg-structural px-7 py-6">
       {filename && (
         <p className="mb-3.5 font-mono text-[10.5px] tracking-[0.08em] text-paper-faint">
           {filename}

@@ -12,12 +12,12 @@ export const Wordmark: React.FC<Props> = ({ surface = 'paper', className }) => {
     <span
       className={cn(
         'font-mono font-medium lowercase tracking-[0.02em]',
-        surface === 'paper' ? 'text-ink' : 'text-paper',
+        surface === 'paper' ? 'text-body' : 'text-paper',
         className,
       )}
     >
       richardkern
-      <span className={surface === 'paper' ? 'text-fern' : 'text-moss'}>.nz</span>
+      <span className={surface === 'paper' ? 'text-accent' : 'text-moss'}>.nz</span>
     </span>
   )
 }

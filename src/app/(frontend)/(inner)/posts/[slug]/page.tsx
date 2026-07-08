@@ -68,7 +68,7 @@ export default async function PostPage({ params: paramsPromise }: Args) {
 
       {draft && <LivePreviewListener />}
 
-      <p className="font-mono text-[12px] tracking-[0.04em] text-haze">
+      <p className="font-mono text-[12px] tracking-[0.04em] text-muted">
         {entryNo && <span>{formatEntryNo(entryNo)}</span>}
         {entryNo && post.publishedAt && <span aria-hidden="true"> &nbsp;·&nbsp; </span>}
         {post.publishedAt && (
@@ -80,7 +80,7 @@ export default async function PostPage({ params: paramsPromise }: Args) {
             {tags.map((tag, i) => (
               <React.Fragment key={tag.id}>
                 {i > 0 && ' '}
-                <Link href={`/posts?tag=${tag.slug}`} className="text-fern hover:underline">
+                <Link href={`/posts?tag=${tag.slug}`} className="text-accent hover:underline">
                   {tag.name}
                 </Link>
               </React.Fragment>
@@ -89,7 +89,7 @@ export default async function PostPage({ params: paramsPromise }: Args) {
         )}
       </p>
 
-      <h1 className="mt-[18px] font-display text-[32px] leading-[1.08] font-bold tracking-[-0.03em] text-ink md:text-[46px]">
+      <h1 className="mt-[18px] font-display text-[32px] leading-[1.08] font-bold tracking-[-0.03em] text-body md:text-[46px]">
         {post.title}
       </h1>
 
@@ -105,7 +105,7 @@ export default async function PostPage({ params: paramsPromise }: Args) {
       </div>
 
       <footer className="mt-12 flex flex-wrap items-baseline justify-between gap-x-8 gap-y-4 border-t border-rule-strong pt-[22px] md:mt-16">
-        <p className="font-serif text-[14.5px] leading-[1.6] text-haze italic">
+        <p className="font-serif text-[14.5px] leading-[1.6] text-muted italic">
           {byline}{' '}
           <span className="inline-flex flex-wrap gap-x-3 not-italic">
             <SocialTextLinks links={socialLinks} className="text-[13px]" />
@@ -113,7 +113,7 @@ export default async function PostPage({ params: paramsPromise }: Args) {
         </p>
         <Link
           href="/posts"
-          className="flex-none font-sans text-[13px] font-medium text-fern hover:underline"
+          className="flex-none font-sans text-[13px] font-medium text-accent hover:underline"
         >
           ← Full log
         </Link>

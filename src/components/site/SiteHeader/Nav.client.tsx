@@ -23,8 +23,8 @@ export const HeaderNav: React.FC<{ links: NavLink[] }> = ({ links }) => {
               // negative margin + padding keeps the 44px tap target without moving the text
               '-my-3 py-3 font-sans text-[13px] font-medium transition-colors',
               active
-                ? 'text-fern underline decoration-[1.5px] underline-offset-[6px]'
-                : 'text-ink hover:text-fern',
+                ? 'text-accent underline decoration-[1.5px] underline-offset-[6px]'
+                : 'text-body hover:text-accent',
             )}
           >
             {label}
