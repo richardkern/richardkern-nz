@@ -2,7 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { anyone } from '../access/anyone'
 import { authenticated } from '../access/authenticated'
-import { slugField } from 'payload'
+import { validatedSlugField } from '@/fields/validatedSlugField'
 
 export const Tags: CollectionConfig = {
   slug: 'tags',
@@ -21,6 +21,6 @@ export const Tags: CollectionConfig = {
       type: 'text',
       required: true,
     },
-    slugField({ useAsSlug: 'name' }),
+    validatedSlugField({ useAsSlug: 'name' }),
   ],
 }

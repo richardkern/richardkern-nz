@@ -9,13 +9,18 @@ import {
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
-import { slugField } from 'payload'
+import { validatedSlugField } from '@/fields/validatedSlugField'
 
 import { authenticated } from '../../access/authenticated'
 import { Code } from '../../blocks/Code/config'
+import { revalidateDelete, revalidateProject } from './hooks/revalidateProject'
 
 export const Projects: CollectionConfig = {
   slug: 'projects',
+  hooks: {
+    afterChange: [revalidateProject],
+    afterDelete: [revalidateDelete],
+  },
   access: {
     create: authenticated,
     delete: authenticated,
@@ -158,6 +163,6 @@ export const Projects: CollectionConfig = {
         position: 'sidebar',
       },
     },
-    slugField(),
+    validatedSlugField(),
   ],
 }

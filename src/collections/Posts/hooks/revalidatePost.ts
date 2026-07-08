@@ -4,6 +4,14 @@ import { revalidatePath, revalidateTag } from 'next/cache'
 
 import type { Post } from '../../../payload-types'
 
+// The homepage lists recent posts, /posts/page/N is statically paginated,
+// and the RSS feed renders published posts
+const revalidatePostLists = () => {
+  revalidatePath('/')
+  revalidatePath('/posts/page/[pageNumber]', 'page')
+  revalidatePath('/feed.xml')
+}
+
 export const revalidatePost: CollectionAfterChangeHook<Post> = ({
   doc,
   previousDoc,
@@ -17,16 +25,22 @@ export const revalidatePost: CollectionAfterChangeHook<Post> = ({
 
       revalidatePath(path)
       revalidateTag('posts-sitemap', 'max')
+      revalidatePostLists()
     }
 
-    // If the post was previously published, we need to revalidate the old path
-    if (previousDoc._status === 'published' && doc._status !== 'published') {
+    // If the post was previously published under a different state or slug,
+    // the old path needs revalidating too
+    if (
+      previousDoc._status === 'published' &&
+      (doc._status !== 'published' || previousDoc.slug !== doc.slug)
+    ) {
       const oldPath = `/posts/${previousDoc.slug}`
 
       payload.logger.info(`Revalidating old post at path: ${oldPath}`)
 
       revalidatePath(oldPath)
       revalidateTag('posts-sitemap', 'max')
+      revalidatePostLists()
     }
   }
   return doc
@@ -38,6 +52,7 @@ export const revalidateDelete: CollectionAfterDeleteHook<Post> = ({ doc, req: { 
 
     revalidatePath(path)
     revalidateTag('posts-sitemap', 'max')
+    revalidatePostLists()
   }
 
   return doc
