@@ -19,6 +19,7 @@ export default async function Page({ searchParams }: Args) {
 export function generateMetadata(): Metadata {
   return {
     title: 'Posts',
-    description: 'Working notes on homelab, AI agents, web development, and running.',
+    description:
+      'Notes and essays from Richard Kern on homelab and self-hosting, AI agents, web development, and the occasional detour into running or aviation.',
   }
 }

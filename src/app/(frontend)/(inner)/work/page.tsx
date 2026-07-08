@@ -82,6 +82,7 @@ export default async function Page() {
 export function generateMetadata(): Metadata {
   return {
     title: 'Work',
-    description: 'Things Richard Kern has built — web apps, homelab tooling, and side projects.',
+    description:
+      'A look at what Richard Kern has built: the tech behind each project, the decisions that shaped it, and where to find it running.',
   }
 }

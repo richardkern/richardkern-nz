@@ -3,9 +3,9 @@ import type { Metadata } from 'next'
 const defaultOpenGraph: Metadata['openGraph'] = {
   type: 'website',
   description:
-    'Richard Kern writes about homelab, AI agents, web development, and running — a notebook in public.',
+    'Notes, projects and writing from Richard Kern, a product manager in New Zealand telecommunications who builds things and writes down what he learns.',
   siteName: 'richardkern.nz',
-  title: 'richardkern.nz',
+  title: 'Richard Kern · Projects, notes and writing',
 }
 
 export const mergeOpenGraph = (og?: Metadata['openGraph']): Metadata['openGraph'] => {
