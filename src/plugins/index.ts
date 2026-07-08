@@ -19,8 +19,10 @@ const r2Configured = Boolean(
     process.env.R2_SECRET_ACCESS_KEY,
 )
 
+// Bare title only: generateMeta appends the "· Richard Kern" suffix at render
+// time, so a suffix baked into meta.title here would render doubled
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
-  return doc?.title ? `${doc.title} · richardkern.nz` : 'richardkern.nz'
+  return doc?.title ?? ''
 }
 
 const generateURL: GenerateURL<Post | Page> = ({ doc, collectionSlug }) => {
