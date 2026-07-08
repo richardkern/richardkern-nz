@@ -52,7 +52,7 @@ export const MediaBlock: React.FC<Props> = (props) => {
       {caption && (
         <div
           className={cn(
-            'mt-3 font-mono text-[11.5px] text-haze',
+            'mt-3 font-mono text-[11.5px] text-muted',
             {
               container: !disableInnerContainer,
             },

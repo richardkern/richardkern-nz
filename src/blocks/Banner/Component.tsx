@@ -13,7 +13,7 @@ type Props = {
 export const BannerBlock: React.FC<Props> = ({ className, content }) => {
   return (
     <div className={cn('mx-auto my-8 w-full', className)}>
-      <div className="border-l-2 border-fern py-1 pl-6 text-haze">
+      <div className="border-l-2 border-accent py-1 pl-6 text-muted">
         <RichText data={content} enableGutter={false} enableProse={false} />
       </div>
     </div>

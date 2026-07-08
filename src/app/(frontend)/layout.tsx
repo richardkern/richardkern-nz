@@ -8,6 +8,7 @@ import { draftMode } from 'next/headers'
 import React from 'react'
 
 import { AdminBar } from '@/components/AdminBar'
+import { themeInitScript } from '@/providers/Theme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 
 import './globals.css'
@@ -38,10 +39,16 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         sourceSerif.variable,
       )}
       lang="en"
+      suppressHydrationWarning
     >
       <head>
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
         <link href="/favicon.png" rel="icon" type="image/png" sizes="32x32" />
+        {/* Applies the saved theme synchronously during HTML parse, before
+            first paint, so there is no flash. Must be a raw inline script:
+            next/script beforeInteractive runs too late in the App Router and
+            reintroduces the flash. */}
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body>
         <AdminBar

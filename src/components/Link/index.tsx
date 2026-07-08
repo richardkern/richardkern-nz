@@ -33,7 +33,7 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
 
   return (
     <Link
-      className={cn('font-sans text-[13.5px] font-medium text-fern hover:underline', className)}
+      className={cn('font-sans text-[13.5px] font-medium text-accent hover:underline', className)}
       href={href || url || ''}
       {...newTabProps}
     >

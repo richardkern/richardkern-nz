@@ -39,8 +39,9 @@
   --font-display: var(--font-schibsted-grotesk);
   --font-serif: var(--font-source-serif);
 
-  /* "Cover & Pages" palette — Design Spec §4. One accent family (fern on
-     paper, moss on charcoal); charcoal only where the site is structural. */
+  /* "Cover & Pages" palette — Design Spec §4. Raw anchors: named colours used
+     directly where a surface is fixed regardless of theme (the charcoal
+     panels' light text stays paper; their accent stays moss). */
   --color-charcoal: #171b16;
   --color-paper: #f7f5ef;
   --color-ink: #22261f;
@@ -48,12 +49,8 @@
   --color-moss: #8fb8a5;
   --color-haze: #5e6459;
 
-  /* Hairlines and rules on paper */
-  --color-hairline: rgba(34, 38, 31, 0.07);
-  --color-rule: rgba(34, 38, 31, 0.09);
-  --color-rule-strong: rgba(34, 38, 31, 0.12);
-
-  /* Text and borders on charcoal surfaces */
+  /* Text and borders on charcoal surfaces (valid in both themes: the
+     structural panels are dark in light mode and stay dark in dark mode). */
   --color-paper-muted: rgba(247, 245, 239, 0.65);
   --color-paper-faint: rgba(247, 245, 239, 0.4);
   --color-paper-dim: rgba(247, 245, 239, 0.75);
@@ -63,20 +60,78 @@
   --color-code-base: #e9e7e0;
   --color-code-string: #d9c79e;
   --color-code-comment: #98a19b;
+
+  /* Semantic, theme-aware roles. Light values are the defaults; the dark
+     scopes below override them. The reading surface flips paper↔charcoal and
+     the accent flips fern↔moss (fern fails AA on charcoal). Structural panels
+     (spine, footer, code) sit on --color-structural: charcoal in light so they
+     contrast against paper; a hair-lifted charcoal in dark so they still read
+     as distinct against the now-dark page. */
+  --color-surface: #f7f5ef; /* page background */
+  --color-body: #22261f; /* primary text */
+  --color-muted: #5e6459; /* secondary / meta text */
+  --color-accent: #2a5a43; /* links, active nav, focus */
+  --color-accent-faint: rgba(42, 90, 67, 0.4); /* underline / decoration */
+  --color-on-accent: #f7f5ef; /* text on an accent fill (selection) */
+  --color-structural: #171b16; /* spine, footer, code surfaces */
+
+  --color-hairline: rgba(34, 38, 31, 0.07);
+  --color-rule: rgba(34, 38, 31, 0.09);
+  --color-rule-strong: rgba(34, 38, 31, 0.12);
+}
+
+/* Theme resolution. color-scheme is declared so browsers stop force-darkening
+   the page (the bug that left dark backgrounds with dark text on phones).
+   An explicit data-theme wins; with none (or "auto") the OS setting drives via
+   the media query, so "auto" responds live to the system without JS. The dark
+   values are duplicated across the two triggers deliberately — a media query
+   and an attribute selector can't share one rule block. */
+:root {
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --color-surface: #171b16;
+    --color-body: #f7f5ef;
+    --color-muted: rgba(247, 245, 239, 0.66);
+    --color-accent: #8fb8a5;
+    --color-accent-faint: rgba(143, 184, 165, 0.4);
+    --color-on-accent: #171b16;
+    --color-structural: #20261e;
+    --color-hairline: rgba(247, 245, 239, 0.07);
+    --color-rule: rgba(247, 245, 239, 0.1);
+    --color-rule-strong: rgba(247, 245, 239, 0.14);
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --color-surface: #171b16;
+  --color-body: #f7f5ef;
+  --color-muted: rgba(247, 245, 239, 0.66);
+  --color-accent: #8fb8a5;
+  --color-accent-faint: rgba(143, 184, 165, 0.4);
+  --color-on-accent: #171b16;
+  --color-structural: #20261e;
+  --color-hairline: rgba(247, 245, 239, 0.07);
+  --color-rule: rgba(247, 245, 239, 0.1);
+  --color-rule-strong: rgba(247, 245, 239, 0.14);
 }
 
 @layer base {
   body {
-    @apply bg-paper text-ink font-sans min-h-dvh flex flex-col;
+    @apply bg-surface text-body font-sans min-h-dvh flex flex-col;
   }
 
   ::selection {
-    background: var(--color-fern);
-    color: var(--color-paper);
+    background: var(--color-accent);
+    color: var(--color-on-accent);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-fern);
+    outline: 2px solid var(--color-accent);
     outline-offset: 2px;
   }
 

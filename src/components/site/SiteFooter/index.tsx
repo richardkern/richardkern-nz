@@ -18,7 +18,7 @@ export async function SiteFooter() {
   return (
     <footer
       data-surface="charcoal"
-      className="mt-auto flex flex-wrap items-center justify-between gap-x-10 gap-y-5 bg-charcoal px-6 py-[30px] sm:px-10 lg:px-24"
+      className="mt-auto flex flex-wrap items-center justify-between gap-x-10 gap-y-5 bg-structural px-6 py-[30px] sm:px-10 lg:px-24"
     >
       <Link href="/" className="inline-block">
         <Wordmark surface="charcoal" className="text-[12.5px]" />
