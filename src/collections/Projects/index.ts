@@ -13,9 +13,14 @@ import { slugField } from 'payload'
 
 import { authenticated } from '../../access/authenticated'
 import { Code } from '../../blocks/Code/config'
+import { revalidateDelete, revalidateProject } from './hooks/revalidateProject'
 
 export const Projects: CollectionConfig = {
   slug: 'projects',
+  hooks: {
+    afterChange: [revalidateProject],
+    afterDelete: [revalidateDelete],
+  },
   access: {
     create: authenticated,
     delete: authenticated,
