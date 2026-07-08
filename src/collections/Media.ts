@@ -44,6 +44,9 @@ export const Media: CollectionConfig = {
     staticDir: path.resolve(dirname, '../../public/media'),
     adminThumbnail: 'thumbnail',
     focalPoint: true,
+    // Raster images only. SVG is excluded deliberately: it can carry inline scripts (stored XSS)
+    // and is served from the same origin as the admin.
+    mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif'],
     imageSizes: [
       {
         name: 'thumbnail',
