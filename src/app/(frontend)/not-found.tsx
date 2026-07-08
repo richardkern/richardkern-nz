@@ -1,7 +1,12 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import React from 'react'
 
 import { SiteHeader } from '@/components/site/SiteHeader'
+
+export const metadata: Metadata = {
+  title: 'Not in the log',
+}
 
 // Header only, no footer — a page missing from the log (mock 5f)
 export default function NotFound() {

@@ -58,10 +58,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 export const metadata: Metadata = {
   metadataBase: new URL(getServerSideURL()),
   title: {
-    default: 'richardkern.nz',
-    template: '%s · richardkern.nz',
+    default: 'Richard Kern · Projects, notes and writing',
+    template: '%s · Richard Kern',
   },
   description:
-    'Richard Kern writes about homelab, AI agents, web development, and running — a notebook in public.',
+    'Notes, projects and writing from Richard Kern, a product manager in New Zealand telecommunications who builds things and writes down what he learns.',
   openGraph: mergeOpenGraph(),
 }
