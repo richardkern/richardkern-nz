@@ -9,7 +9,7 @@ import {
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
-import { slugField } from 'payload'
+import { validatedSlugField } from '@/fields/validatedSlugField'
 
 import { authenticated } from '../../access/authenticated'
 import { Code } from '../../blocks/Code/config'
@@ -163,6 +163,6 @@ export const Projects: CollectionConfig = {
         position: 'sidebar',
       },
     },
-    slugField(),
+    validatedSlugField(),
   ],
 }
