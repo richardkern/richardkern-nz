@@ -12,6 +12,8 @@ async function getDocument(collection: Collection, slug: string, depth = 0) {
   const page = await payload.find({
     collection,
     depth,
+    // Public redirect resolution: enforce access control so unpublished docs never leak.
+    overrideAccess: false,
     where: {
       slug: {
         equals: slug,
