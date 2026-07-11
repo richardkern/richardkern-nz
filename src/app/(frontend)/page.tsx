@@ -156,39 +156,43 @@ export default async function HomePage() {
               <section>
                 <SectionLabel>Selected work</SectionLabel>
                 {projects.length > 0 ? (
-                  projects.map((project) => (
-                    <Link
-                      key={project.id}
-                      href={`/work/${project.slug}`}
-                      className="group grid grid-cols-[52px_88px_1fr] items-start gap-3.5 border-b border-hairline py-3.5 md:grid-cols-[64px_112px_1fr] md:gap-4.5"
-                    >
-                      <span className="font-mono text-[10.5px] leading-[1.9] text-muted md:text-[11px]">
-                        {project.year}
-                      </span>
-                      {/* Work is the visual pillar: a small, consistent cover thumb,
-                          same Media treatment as the Work index. Writing stays log text. */}
-                      <div className="relative aspect-[16/10] overflow-hidden border border-rule bg-hairline">
-                        {project.coverImage && typeof project.coverImage === 'object' && (
-                          <Media
-                            resource={project.coverImage}
-                            fill
-                            imgClassName="object-cover"
-                            size="(max-width: 1024px) 88px, 112px"
-                          />
-                        )}
-                      </div>
-                      <span>
-                        <span className="font-serif text-[15px] leading-[1.45] text-body transition-colors group-hover:text-accent md:text-[16px]">
-                          {project.title}
-                        </span>
-                        {project.description && (
-                          <span className="mt-0.75 block font-sans text-[12px] leading-normal text-muted md:text-[12.5px]">
-                            {project.description}
+                  <div className="space-y-6">
+                    {projects.map((project) => (
+                      <Link
+                        key={project.id}
+                        href={`/work/${project.slug}`}
+                        className="group block border-b border-hairline pb-5"
+                      >
+                        {/* Work is the visual pillar: a full-width cover over the
+                            meta, the Work-index card shrunk for the home. Height is
+                            bounded (not ratio-driven) so three featured items don't
+                            tower; tech list is index-only, and Writing stays log text. */}
+                        <div className="relative h-[168px] w-full overflow-hidden border border-rule bg-hairline md:h-[188px] min-[2100px]:h-[224px]">
+                          {project.coverImage && typeof project.coverImage === 'object' && (
+                            <Media
+                              resource={project.coverImage}
+                              fill
+                              imgClassName="object-cover object-top"
+                              size="(max-width: 1024px) 92vw, 760px"
+                            />
+                          )}
+                        </div>
+                        <div className="mt-3 flex items-baseline justify-between gap-4">
+                          <h3 className="font-serif text-[15px] leading-[1.45] text-body transition-colors group-hover:text-accent md:text-[16px]">
+                            {project.title}
+                          </h3>
+                          <span className="flex-none font-mono text-[10.5px] text-muted md:text-[11px]">
+                            {project.year}
                           </span>
+                        </div>
+                        {project.description && (
+                          <p className="mt-1.5 font-sans text-[12px] leading-normal text-muted md:text-[12.5px]">
+                            {project.description}
+                          </p>
                         )}
-                      </span>
-                    </Link>
-                  ))
+                      </Link>
+                    ))}
+                  </div>
                 ) : (
                   <p className="py-3.5 font-serif text-[15px] text-muted">Nothing to show yet.</p>
                 )}
