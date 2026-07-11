@@ -1,6 +1,6 @@
 import type { CollectionAfterChangeHook, CollectionAfterDeleteHook } from 'payload'
 
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 
 import type { Project } from '../../../payload-types'
 
@@ -31,10 +31,12 @@ export const revalidateProject: CollectionAfterChangeHook<Project> = ({
       revalidatePath(oldPath)
     }
 
-    // The work index and the homepage both list projects
+    // The work index and the homepage both list projects; the work sitemap
+    // (cached by tag) must be rebuilt on any publish/unpublish/slug change too
     if (doc.status === 'published' || previousDoc?.status === 'published') {
       revalidatePath('/work')
       revalidatePath('/')
+      revalidateTag('work-sitemap', 'max')
     }
   }
   return doc
@@ -48,6 +50,7 @@ export const revalidateDelete: CollectionAfterDeleteHook<Project> = ({
     revalidatePath(`/work/${doc?.slug}`)
     revalidatePath('/work')
     revalidatePath('/')
+    revalidateTag('work-sitemap', 'max')
   }
 
   return doc
