@@ -78,106 +78,111 @@ export default async function HomePage() {
         </div>
       </aside>
 
-      <main className="flex flex-1 flex-col px-6 pt-6 pb-11 md:px-12 md:pt-11 md:pb-12 lg:pr-24 lg:pl-26">
-        <nav className="flex gap-6.5 md:justify-end md:gap-8.5">
-          {DEFAULT_NAV.map(({ label, href }) => (
-            <Link
-              key={href}
-              href={href}
-              className="-my-2 py-2 font-sans text-[13.5px] font-medium text-body transition-colors hover:text-accent md:text-[13px]"
-            >
-              {label}
-            </Link>
-          ))}
-        </nav>
+      <main className="flex flex-1 flex-col px-6 pt-6 pb-11 md:px-12 md:pt-11 md:pb-12 lg:px-24">
+        {/* Content column: capped and centred so it doesn't sprawl on wide
+            displays, and no longer bottom-pinned so the log sits up under the
+            bio on the first screen rather than leaving a mid-page void. */}
+        <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col">
+          <nav className="flex gap-6.5 md:justify-end md:gap-8.5">
+            {DEFAULT_NAV.map(({ label, href }) => (
+              <Link
+                key={href}
+                href={href}
+                className="-my-2 py-2 font-sans text-[13.5px] font-medium text-body transition-colors hover:text-accent md:text-[13px]"
+              >
+                {label}
+              </Link>
+            ))}
+          </nav>
 
-        <div className="home-reveal mt-10 flex flex-1 flex-col md:mt-19.5">
-          <h1 className="font-display text-[clamp(3.375rem,2.1875rem+5vw,6.75rem)] leading-[0.98] font-bold tracking-[-0.03em] text-body md:tracking-[-0.035em]">
-            richard
-            <br />
-            kern
-            <span className="text-accent">.</span>
-          </h1>
+          <div className="home-reveal mt-10 flex flex-1 flex-col justify-center">
+            <h1 className="font-display text-[clamp(3.375rem,2.1875rem+5vw,6.75rem)] leading-[0.98] font-bold tracking-[-0.03em] text-body md:tracking-[-0.035em]">
+              richard
+              <br />
+              kern
+              <span className="text-accent">.</span>
+            </h1>
 
-          {bio && (
-            <p className="mt-5.5 max-w-140 font-serif text-[17px] leading-[1.6] text-body md:mt-8 md:text-[21px]">
-              {bio}
-            </p>
-          )}
-
-          <div className="mt-11.5 grid gap-9.5 md:mt-auto md:grid-cols-2 md:gap-16 md:pt-16 lg:gap-24">
-            <section>
-              <SectionLabel>Writing</SectionLabel>
-              {posts.length > 0 ? (
-                posts.map((post) => (
-                  <Link
-                    key={post.id}
-                    href={`/posts/${post.slug}`}
-                    className="group grid grid-cols-[64px_1fr] gap-3.5 border-b border-hairline py-3.5 md:grid-cols-[96px_1fr] md:gap-4.5"
-                  >
-                    <span className="font-mono text-[10.5px] leading-[1.9] text-muted md:text-[11px]">
-                      {postNumbers.has(post.id) && (
-                        <>
-                          {formatEntryNo(postNumbers.get(post.id)!)}
-                          <br />
-                        </>
-                      )}
-                      {post.publishedAt && formatLogDate(post.publishedAt, 'day')}
-                    </span>
-                    <span className="self-center font-serif text-[15px] leading-[1.45] text-body transition-colors group-hover:text-accent md:text-[16px]">
-                      {post.title}
-                    </span>
-                  </Link>
-                ))
-              ) : (
-                <p className="py-3.5 font-serif text-[15px] text-muted">Nothing logged yet.</p>
-              )}
-              <p className="mt-4">
-                <Link
-                  href="/posts"
-                  className="font-sans text-[13px] font-medium text-accent hover:underline"
-                >
-                  Full log →
-                </Link>
+            {bio && (
+              <p className="mt-5.5 max-w-140 font-serif text-[17px] leading-[1.6] text-body md:mt-8 md:text-[21px]">
+                {bio}
               </p>
-            </section>
+            )}
 
-            <section>
-              <SectionLabel>Selected work</SectionLabel>
-              {projects.length > 0 ? (
-                projects.map((project) => (
-                  <Link
-                    key={project.id}
-                    href={`/work/${project.slug}`}
-                    className="group grid grid-cols-[64px_1fr] gap-3.5 border-b border-hairline py-3.5 md:grid-cols-[96px_1fr] md:gap-4.5"
-                  >
-                    <span className="font-mono text-[10.5px] leading-[1.9] text-muted md:text-[11px]">
-                      {project.year}
-                    </span>
-                    <span>
-                      <span className="font-serif text-[15px] leading-[1.45] text-body transition-colors group-hover:text-accent md:text-[16px]">
-                        {project.title}
+            <div className="mt-12 grid gap-9.5 md:mt-16 md:grid-cols-2 md:gap-16 lg:gap-24">
+              <section>
+                <SectionLabel>Writing</SectionLabel>
+                {posts.length > 0 ? (
+                  posts.map((post) => (
+                    <Link
+                      key={post.id}
+                      href={`/posts/${post.slug}`}
+                      className="group grid grid-cols-[64px_1fr] gap-3.5 border-b border-hairline py-3.5 md:grid-cols-[96px_1fr] md:gap-4.5"
+                    >
+                      <span className="font-mono text-[10.5px] leading-[1.9] text-muted md:text-[11px]">
+                        {postNumbers.has(post.id) && (
+                          <>
+                            {formatEntryNo(postNumbers.get(post.id)!)}
+                            <br />
+                          </>
+                        )}
+                        {post.publishedAt && formatLogDate(post.publishedAt, 'day')}
                       </span>
-                      {project.description && (
-                        <span className="mt-0.75 block font-sans text-[12px] leading-normal text-muted md:text-[12.5px]">
-                          {project.description}
-                        </span>
-                      )}
-                    </span>
+                      <span className="self-center font-serif text-[15px] leading-[1.45] text-body transition-colors group-hover:text-accent md:text-[16px]">
+                        {post.title}
+                      </span>
+                    </Link>
+                  ))
+                ) : (
+                  <p className="py-3.5 font-serif text-[15px] text-muted">Nothing logged yet.</p>
+                )}
+                <p className="mt-4">
+                  <Link
+                    href="/posts"
+                    className="font-sans text-[13px] font-medium text-accent hover:underline"
+                  >
+                    Full log →
                   </Link>
-                ))
-              ) : (
-                <p className="py-3.5 font-serif text-[15px] text-muted">Nothing to show yet.</p>
-              )}
-              <p className="mt-4">
-                <Link
-                  href="/work"
-                  className="font-sans text-[13px] font-medium text-accent hover:underline"
-                >
-                  All work →
-                </Link>
-              </p>
-            </section>
+                </p>
+              </section>
+
+              <section>
+                <SectionLabel>Selected work</SectionLabel>
+                {projects.length > 0 ? (
+                  projects.map((project) => (
+                    <Link
+                      key={project.id}
+                      href={`/work/${project.slug}`}
+                      className="group grid grid-cols-[64px_1fr] gap-3.5 border-b border-hairline py-3.5 md:grid-cols-[96px_1fr] md:gap-4.5"
+                    >
+                      <span className="font-mono text-[10.5px] leading-[1.9] text-muted md:text-[11px]">
+                        {project.year}
+                      </span>
+                      <span>
+                        <span className="font-serif text-[15px] leading-[1.45] text-body transition-colors group-hover:text-accent md:text-[16px]">
+                          {project.title}
+                        </span>
+                        {project.description && (
+                          <span className="mt-0.75 block font-sans text-[12px] leading-normal text-muted md:text-[12.5px]">
+                            {project.description}
+                          </span>
+                        )}
+                      </span>
+                    </Link>
+                  ))
+                ) : (
+                  <p className="py-3.5 font-serif text-[15px] text-muted">Nothing to show yet.</p>
+                )}
+                <p className="mt-4">
+                  <Link
+                    href="/work"
+                    className="font-sans text-[13px] font-medium text-accent hover:underline"
+                  >
+                    All work →
+                  </Link>
+                </p>
+              </section>
+            </div>
           </div>
         </div>
       </main>
