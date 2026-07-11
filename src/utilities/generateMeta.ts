@@ -7,9 +7,12 @@ import { getServerSideURL } from './getURL'
 
 const getImageURL = (image?: Media | Config['db']['defaultIDType'] | null) => {
   if (image && typeof image === 'object' && 'url' in image) {
-    const serverUrl = getServerSideURL()
-    const ogUrl = image.sizes?.og?.url
-    return ogUrl ? serverUrl + ogUrl : serverUrl + image.url
+    // Media URLs are already absolute here (serverURL is set in the Payload
+    // config), so only prepend the origin when the url is relative — otherwise
+    // it doubles into https://hosthttps://host/api/media/...
+    const raw = image.sizes?.og?.url || image.url
+    if (!raw) return undefined
+    return raw.startsWith('http') ? raw : `${getServerSideURL()}${raw}`
   }
   return undefined
 }
