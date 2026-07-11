@@ -7,8 +7,9 @@ import { Media } from '@/components/Media'
 import { SocialGlyphs } from '@/components/site/socialLinks'
 import { ThemeToggle } from '@/components/site/ThemeToggle'
 import { Wordmark } from '@/components/site/Wordmark'
-import { formatEntryNo, formatLogDate, getPostNumbers } from '@/utilities/logbook'
-import { DEFAULT_NAV } from '@/utilities/navLinks'
+import { getCachedGlobal } from '@/utilities/getGlobals'
+import { formatEntryNo, formatLogDate } from '@/utilities/logbook'
+import { navLinksFrom } from '@/utilities/navLinks'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
@@ -16,11 +17,12 @@ export const revalidate = 600
 export default async function HomePage() {
   const payload = await getPayload({ config: configPromise })
 
-  const [siteSettings, postsResult, projectsResult, postNumbers] = await Promise.all([
+  const [siteSettings, header, postsResult, projectsResult] = await Promise.all([
     payload.findGlobal({
       slug: 'site-settings',
       select: { bio: true, socialLinks: true },
     }),
+    getCachedGlobal('header', 1)(),
     payload.find({
       collection: 'posts',
       depth: 0,
@@ -39,11 +41,15 @@ export default async function HomePage() {
       where: { featured: { equals: true } },
       select: { title: true, slug: true, description: true, year: true, coverImage: true },
     }),
-    getPostNumbers(),
   ])
 
   const bio = siteSettings?.bio
   const socialLinks = siteSettings?.socialLinks ?? []
+  const navLinks = navLinksFrom(header)
+  // Entry N° is the post's chronological position (oldest = 1). These three are
+  // the newest posts sorted -publishedAt, so the newest is totalDocs and each
+  // older one is one less — no separate full-scan needed on the homepage.
+  const totalPosts = postsResult.totalDocs
   const posts = postsResult.docs
   const projects = projectsResult.docs
 
@@ -87,7 +93,7 @@ export default async function HomePage() {
             stack. */}
         <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col min-[2100px]:max-w-[100rem]">
           <nav className="flex gap-6.5 md:justify-end md:gap-8.5">
-            {DEFAULT_NAV.map(({ label, href }) => (
+            {navLinks.map(({ label, href }) => (
               <Link
                 key={href}
                 href={href}
@@ -120,16 +126,16 @@ export default async function HomePage() {
               <section>
                 <SectionLabel>Writing</SectionLabel>
                 {posts.length > 0 ? (
-                  posts.map((post) => (
+                  posts.map((post, index) => (
                     <Link
                       key={post.id}
                       href={`/posts/${post.slug}`}
                       className="group grid grid-cols-[64px_1fr] gap-3.5 border-b border-hairline py-3.5 md:grid-cols-[96px_1fr] md:gap-4.5"
                     >
                       <span className="font-mono text-[10.5px] leading-[1.9] text-muted md:text-[11px]">
-                        {postNumbers.has(post.id) && (
+                        {totalPosts > 0 && (
                           <>
-                            {formatEntryNo(postNumbers.get(post.id)!)}
+                            {formatEntryNo(totalPosts - index)}
                             <br />
                           </>
                         )}

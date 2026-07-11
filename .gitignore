@@ -25,3 +25,6 @@ node_modules/
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Internal design/handoff artifacts (kept in the Obsidian vault, not the repo)
+*.zip
