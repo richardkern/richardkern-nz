@@ -3,6 +3,7 @@ import { getPayload } from 'payload'
 import Link from 'next/link'
 import React from 'react'
 
+import { Media } from '@/components/Media'
 import { SocialGlyphs } from '@/components/site/socialLinks'
 import { ThemeToggle } from '@/components/site/ThemeToggle'
 import { Wordmark } from '@/components/site/Wordmark'
@@ -31,12 +32,12 @@ export default async function HomePage() {
     }),
     payload.find({
       collection: 'projects',
-      depth: 0,
+      depth: 1,
       limit: 3,
       overrideAccess: false,
       sort: '-year',
       where: { featured: { equals: true } },
-      select: { title: true, slug: true, description: true, year: true },
+      select: { title: true, slug: true, description: true, year: true, coverImage: true },
     }),
     getPostNumbers(),
   ])
@@ -159,11 +160,23 @@ export default async function HomePage() {
                     <Link
                       key={project.id}
                       href={`/work/${project.slug}`}
-                      className="group grid grid-cols-[64px_1fr] gap-3.5 border-b border-hairline py-3.5 md:grid-cols-[96px_1fr] md:gap-4.5"
+                      className="group grid grid-cols-[52px_88px_1fr] items-start gap-3.5 border-b border-hairline py-3.5 md:grid-cols-[64px_112px_1fr] md:gap-4.5"
                     >
                       <span className="font-mono text-[10.5px] leading-[1.9] text-muted md:text-[11px]">
                         {project.year}
                       </span>
+                      {/* Work is the visual pillar: a small, consistent cover thumb,
+                          same Media treatment as the Work index. Writing stays log text. */}
+                      <div className="relative aspect-[16/10] overflow-hidden border border-rule bg-hairline">
+                        {project.coverImage && typeof project.coverImage === 'object' && (
+                          <Media
+                            resource={project.coverImage}
+                            fill
+                            imgClassName="object-cover"
+                            size="(max-width: 1024px) 88px, 112px"
+                          />
+                        )}
+                      </div>
                       <span>
                         <span className="font-serif text-[15px] leading-[1.45] text-body transition-colors group-hover:text-accent md:text-[16px]">
                           {project.title}
