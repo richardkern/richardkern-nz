@@ -4,12 +4,30 @@
  * @param cacheTag Optional cache tag to append to the URL
  * @returns Properly formatted URL with cache tag if provided
  *
- * Local paths (e.g. `/api/media/file/image.webp`) are kept relative so
- * Next.js image optimization treats them as local rather than fetching
- * through `remotePatterns`, which blocks private IPs since Next.js 16.
+ * Media paths must stay relative (e.g. `/api/media/file/image.webp`) so the
+ * Next.js image optimizer treats them as local and self-fetches over the
+ * internal loopback, rather than fetching the absolute public URL back through
+ * the front-door proxy. In production that round-trip hits Coolify/Traefik's
+ * pre-launch basic-auth gate and the optimizer gets a 401 ("upstream response
+ * is invalid"). Payload emits absolute URLs because `serverURL` is set in the
+ * config, so we strip a same-origin origin back off here before optimization.
  */
 export const getMediaUrl = (url: string | null | undefined, cacheTag?: string | null): string => {
   if (!url) return ''
+
+  // Reduce an absolute same-origin media URL to a relative path so Next treats
+  // it as a local image. Genuinely external images (different host) are left
+  // absolute so `remotePatterns` still governs them.
+  if (url.startsWith('http')) {
+    try {
+      const parsed = new URL(url)
+      if (parsed.pathname.startsWith('/api/media/') || parsed.pathname.startsWith('/media/')) {
+        url = `${parsed.pathname}${parsed.search}`
+      }
+    } catch {
+      // Not a parseable URL; fall through and use it as-is.
+    }
+  }
 
   if (cacheTag && cacheTag !== '') {
     cacheTag = encodeURIComponent(cacheTag)
