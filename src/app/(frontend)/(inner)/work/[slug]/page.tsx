@@ -7,7 +7,9 @@ import Link from 'next/link'
 import React, { cache } from 'react'
 
 import { Media } from '@/components/Media'
+import { ImageZoom } from '@/components/site/ImageZoom'
 import RichText from '@/components/RichText'
+import { getMediaUrl } from '@/utilities/getMediaUrl'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -99,19 +101,25 @@ export default async function ProjectPage({ params: paramsPromise }: Args) {
 
       {gallery.length > 0 && (
         <div className="mt-9 grid gap-6 md:mt-11 md:grid-cols-2">
-          {gallery.map((item, i) => (
-            <div
-              key={i}
-              className="relative aspect-16/10 overflow-hidden border border-rule bg-hairline"
-            >
-              <Media
-                resource={item.image}
-                fill
-                imgClassName="object-cover"
-                size="(max-width: 768px) 100vw, 420px"
-              />
-            </div>
-          ))}
+          {gallery.map((item, i) => {
+            const img = item.image
+            if (!img || typeof img !== 'object') return null
+            return (
+              <ImageZoom
+                key={i}
+                src={getMediaUrl(img.url, img.updatedAt)}
+                alt={img.alt || project.title}
+                className="relative aspect-16/10 overflow-hidden border border-rule bg-hairline"
+              >
+                <Media
+                  resource={img}
+                  fill
+                  imgClassName="object-cover"
+                  size="(max-width: 768px) 100vw, 420px"
+                />
+              </ImageZoom>
+            )
+          })}
         </div>
       )}
 
