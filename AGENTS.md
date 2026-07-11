@@ -90,6 +90,7 @@ Full intent in the vault `Design Spec` (revised 2026-07-06) and `Design Decision
 | `DATABASE_URL` | docker-compose locally; Coolify-managed Postgres per environment |
 | `PAYLOAD_SECRET` | generated per environment |
 | `CRON_SECRET` | generated per environment (Payload jobs endpoint) |
+| `PREVIEW_SECRET` | generated per environment (draft-preview route). Read server-side by `generatePreviewPath` and `/next/preview`; if unset in Coolify the admin post preview 403s with "You are not allowed to preview this page" (bit staging + production 2026-07-11, was missing from this table so never added to Coolify) |
 | `NEXT_PUBLIC_SERVER_URL` | per environment (localhost:3000 / staging domain / richardkern.nz) |
 | `R2_BUCKET`, `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` | Cloudflare R2 dashboard (production/staging only; dev uses local disk) |
 | `RESEND_API_KEY` | Resend dashboard (staging/production; when unset, Payload logs emails to the console — dev default) |
