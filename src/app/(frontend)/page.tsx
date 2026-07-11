@@ -84,7 +84,7 @@ export default async function HomePage() {
             lg the identity leaf (name + statement) and the log leaf (writing
             over selected work) sit side by side, top-aligned; below lg they
             stack. */}
-        <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col">
+        <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col min-[2100px]:max-w-[100rem]">
           <nav className="flex gap-6.5 md:justify-end md:gap-8.5">
             {DEFAULT_NAV.map(({ label, href }) => (
               <Link
@@ -97,10 +97,10 @@ export default async function HomePage() {
             ))}
           </nav>
 
-          <div className="home-reveal mt-10 flex flex-1 flex-col gap-12 lg:mt-14 lg:grid lg:grid-cols-[1.1fr_1fr] lg:items-start lg:gap-x-16 lg:gap-y-0">
+          <div className="home-reveal mt-10 flex flex-1 flex-col gap-12 lg:mt-14 lg:grid lg:grid-cols-[1.1fr_1fr] lg:items-start lg:gap-x-16 lg:gap-y-0 min-[2100px]:content-center min-[2100px]:gap-x-24">
             {/* Left leaf — the title page: name over statement */}
             <div>
-              <h1 className="font-display text-[clamp(3.375rem,2.1875rem+5vw,6.75rem)] leading-[0.98] font-bold tracking-[-0.03em] text-body md:tracking-[-0.035em]">
+              <h1 className="font-display text-[clamp(3.375rem,2.1875rem+5vw,6.75rem)] leading-[0.98] font-bold tracking-[-0.03em] text-body md:tracking-[-0.035em] min-[2100px]:text-[8rem]">
                 richard
                 <br />
                 kern
@@ -108,14 +108,14 @@ export default async function HomePage() {
               </h1>
 
               {bio && (
-                <p className="mt-5.5 max-w-140 font-serif text-[17px] leading-[1.6] text-body md:mt-8 md:text-[21px]">
+                <p className="mt-5.5 max-w-140 font-serif text-[17px] leading-[1.6] text-body md:mt-8 md:text-[21px] min-[2100px]:text-[24px]">
                   {bio}
                 </p>
               )}
             </div>
 
             {/* Right leaf — the log: writing over selected work, stacked */}
-            <div className="flex flex-col gap-10 lg:gap-12">
+            <div className="flex flex-col gap-10 lg:gap-12 min-[2100px]:gap-16">
               <section>
                 <SectionLabel>Writing</SectionLabel>
                 {posts.length > 0 ? (
