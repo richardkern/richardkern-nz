@@ -11,7 +11,7 @@ export async function SiteHeader() {
   const header = await getCachedGlobal('header', 1)()
 
   return (
-    <header className="flex items-center justify-between border-b border-rule px-6 py-5 sm:px-10 md:py-[26px] lg:px-24">
+    <header className="sticky top-0 z-40 flex items-center justify-between border-b border-rule bg-surface px-6 py-5 sm:px-10 md:py-[26px] lg:px-24">
       <Link href="/" className="inline-block">
         <Wordmark className="text-[16px]" />
       </Link>

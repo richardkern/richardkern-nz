@@ -142,7 +142,7 @@ export default async function PostPage({ params: paramsPromise }: Args) {
       {hasCover && (
         <Media
           resource={post.coverImage}
-          className="hidden lg:col-start-2 lg:row-start-1 lg:block lg:sticky lg:top-8 lg:self-start"
+          className="hidden lg:col-start-2 lg:row-start-1 lg:block lg:sticky lg:top-[88px] lg:self-start"
           imgClassName="w-full border border-rule"
         />
       )}
