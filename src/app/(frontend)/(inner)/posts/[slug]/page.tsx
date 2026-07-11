@@ -10,9 +10,11 @@ import RichText from '@/components/RichText'
 
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { Media } from '@/components/Media'
+import { ImageZoom } from '@/components/site/ImageZoom'
 import { SocialTextLinks } from '@/components/site/socialLinks'
 import { generateMeta } from '@/utilities/generateMeta'
 import { getCachedGlobal } from '@/utilities/getGlobals'
+import { getMediaUrl } from '@/utilities/getMediaUrl'
 import { formatEntryNo, formatLogDate, getPostNumbers } from '@/utilities/logbook'
 
 export async function generateStaticParams() {
@@ -61,7 +63,12 @@ export default async function PostPage({ params: paramsPromise }: Args) {
   const socialLinks = siteSettings?.socialLinks ?? []
   const tags = (post.tags ?? []).filter((t) => typeof t === 'object')
 
-  const hasCover = post.coverImage && typeof post.coverImage === 'object'
+  const cover = typeof post.coverImage === 'object' ? post.coverImage : null
+  const hasCover = Boolean(cover)
+  // Full-res original for the click-to-enlarge lightbox (relativised so it never
+  // hits the auth-gated optimizer path).
+  const coverAlt = cover?.alt || post.title
+  const coverFullSrc = cover ? getMediaUrl(cover.url, cover.updatedAt) : ''
 
   // Only widen into the two-column grid when there's a cover to fill the right
   // column. A coverless post keeps the normal single centred reading column
@@ -111,12 +118,10 @@ export default async function PostPage({ params: paramsPromise }: Args) {
         {/* Cover stacked inline on narrow screens; the wide-screen copy lives in the
             right column below. Only the visible one loads (a hidden lazy image never
             fetches), so rendering both is cheap and avoids a grid row-span hack. */}
-        {hasCover && (
-          <Media
-            resource={post.coverImage}
-            className="mt-10 lg:hidden"
-            imgClassName="w-full border border-rule"
-          />
+        {cover && (
+          <ImageZoom src={coverFullSrc} alt={coverAlt} className="mt-10 block lg:hidden">
+            <Media resource={cover} htmlElement={null} imgClassName="w-full border border-rule" />
+          </ImageZoom>
         )}
 
         <div className="mt-8 md:mt-10">
@@ -139,12 +144,14 @@ export default async function PostPage({ params: paramsPromise }: Args) {
         </footer>
       </div>
 
-      {hasCover && (
-        <Media
-          resource={post.coverImage}
+      {cover && (
+        <ImageZoom
+          src={coverFullSrc}
+          alt={coverAlt}
           className="hidden lg:col-start-2 lg:row-start-1 lg:block lg:sticky lg:top-[88px] lg:self-start"
-          imgClassName="w-full border border-rule"
-        />
+        >
+          <Media resource={cover} htmlElement={null} imgClassName="w-full border border-rule" />
+        </ImageZoom>
       )}
     </article>
   )
