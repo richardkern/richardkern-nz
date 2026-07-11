@@ -449,6 +449,14 @@ export interface Project {
     | null;
   url?: string | null;
   repoUrl?: string | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
+  };
   year?: number | null;
   featured?: boolean | null;
   status: 'draft' | 'published';
@@ -810,6 +818,13 @@ export interface ProjectsSelect<T extends boolean = true> {
       };
   url?: T;
   repoUrl?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
   year?: T;
   featured?: T;
   status?: T;
