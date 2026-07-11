@@ -56,7 +56,7 @@ export const ImageZoom: React.FC<{
         type="button"
         onClick={() => setOpen(true)}
         aria-label={alt ? `Enlarge image: ${alt}` : 'Enlarge image'}
-        className={cn('block w-full cursor-zoom-in', className)}
+        className={cn('block w-full cursor-zoom-in p-0', className)}
       >
         {children}
       </button>
