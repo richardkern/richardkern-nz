@@ -12,8 +12,9 @@ import { DEFAULT_NAV } from '@/utilities/navLinks'
 // Homepage variant for staging review: "cover & pages".
 //
 // Fold one is a full-bleed charcoal cover — the notebook cover carrying the
-// name, one-line bio, follow, a blind-debossed mark and a whisper of grain.
-// Scrolling opens onto the paper pages with the writing and work log.
+// name, one-line bio and follow, over a subtle material base (grain and a soft
+// vignette). Scrolling opens onto the paper pages with the writing and work
+// log.
 //
 // This deliberately reverses Design Spec §5 (paper home with a spine rail and
 // no header/footer). It lives at /cover so it runs alongside the current home
@@ -91,20 +92,18 @@ export default async function CoverHome() {
           <rect width="100%" height="100%" filter="url(#cover-grain)" />
         </svg>
 
-        {/* Material 2: the cover stamp — a blind-debossed rk. bleeding off the
-            corner. Tuning knobs are the two rgba values: keep it felt, not
-            seen. Darker glyph fill = recessed; the faint paper highlight is the
-            light catching the pressed edge. */}
-        <span
+        {/* Material 2: a soft vignette, so the cover catches light towards the
+            centre and falls off at the edges like a physical cover. The rk.
+            stamp was pulled after review; this is the mark-free base. Tuning
+            knob: the edge alpha below. */}
+        <div
           aria-hidden="true"
-          className="pointer-events-none absolute -right-[3vw] -bottom-[6vw] font-mono leading-none lowercase select-none text-[42vw] md:text-[34vw] lg:text-[26vw]"
+          className="pointer-events-none absolute inset-0"
           style={{
-            color: 'rgba(0, 0, 0, 0.16)',
-            textShadow: '0 1px 0 rgba(247, 245, 239, 0.045)',
+            background:
+              'radial-gradient(120% 90% at 50% 38%, transparent 55%, rgba(0, 0, 0, 0.28) 100%)',
           }}
-        >
-          rk.
-        </span>
+        />
 
         {/* Top: wordmark + nav */}
         <div className="relative flex items-center justify-between">
