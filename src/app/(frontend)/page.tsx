@@ -79,9 +79,11 @@ export default async function HomePage() {
       </aside>
 
       <main className="flex flex-1 flex-col px-6 pt-6 pb-11 md:px-12 md:pt-11 md:pb-12 lg:px-24">
-        {/* Content column: capped and centred so it doesn't sprawl on wide
-            displays, and no longer bottom-pinned so the log sits up under the
-            bio on the first screen rather than leaving a mid-page void. */}
+        {/* Content column: width-capped and centred so the two leaves read as
+            a spread rather than flung to opposite edges on a wide display. On
+            lg the identity leaf (name + statement) and the log leaf (writing
+            over selected work) sit side by side, top-aligned; below lg they
+            stack. */}
         <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col">
           <nav className="flex gap-6.5 md:justify-end md:gap-8.5">
             {DEFAULT_NAV.map(({ label, href }) => (
@@ -95,21 +97,25 @@ export default async function HomePage() {
             ))}
           </nav>
 
-          <div className="home-reveal mt-10 flex flex-1 flex-col justify-center">
-            <h1 className="font-display text-[clamp(3.375rem,2.1875rem+5vw,6.75rem)] leading-[0.98] font-bold tracking-[-0.03em] text-body md:tracking-[-0.035em]">
-              richard
-              <br />
-              kern
-              <span className="text-accent">.</span>
-            </h1>
+          <div className="home-reveal mt-10 flex flex-1 flex-col gap-12 lg:mt-14 lg:grid lg:grid-cols-[1.1fr_1fr] lg:items-start lg:gap-x-16 lg:gap-y-0">
+            {/* Left leaf — the title page: name over statement */}
+            <div>
+              <h1 className="font-display text-[clamp(3.375rem,2.1875rem+5vw,6.75rem)] leading-[0.98] font-bold tracking-[-0.03em] text-body md:tracking-[-0.035em]">
+                richard
+                <br />
+                kern
+                <span className="text-accent">.</span>
+              </h1>
 
-            {bio && (
-              <p className="mt-5.5 max-w-140 font-serif text-[17px] leading-[1.6] text-body md:mt-8 md:text-[21px]">
-                {bio}
-              </p>
-            )}
+              {bio && (
+                <p className="mt-5.5 max-w-140 font-serif text-[17px] leading-[1.6] text-body md:mt-8 md:text-[21px]">
+                  {bio}
+                </p>
+              )}
+            </div>
 
-            <div className="mt-12 grid gap-9.5 md:mt-16 md:grid-cols-2 md:gap-16 lg:gap-24">
+            {/* Right leaf — the log: writing over selected work, stacked */}
+            <div className="flex flex-col gap-10 lg:gap-12">
               <section>
                 <SectionLabel>Writing</SectionLabel>
                 {posts.length > 0 ? (
