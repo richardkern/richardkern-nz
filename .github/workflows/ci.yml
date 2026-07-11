@@ -5,6 +5,10 @@ on:
     branches: [main, develop]
   pull_request:
 
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -68,6 +72,9 @@ jobs:
 
       - name: Run migrations against a fresh database
         run: pnpm migrate
+
+      - name: Integration tests
+        run: pnpm test:int
 
       - name: Build
         run: pnpm build
