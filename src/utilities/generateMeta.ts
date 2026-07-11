@@ -16,10 +16,19 @@ const getImageURL = (image?: Media | Config['db']['defaultIDType'] | null) => {
 
 export const generateMeta = async (args: {
   doc: Partial<Page> | Partial<Post> | Partial<Project> | null
+  collection?: 'posts' | 'projects' | 'pages'
 }): Promise<Metadata> => {
-  const { doc } = args
+  const { doc, collection } = args
 
   const ogImage = getImageURL(doc?.meta?.image)
+
+  const slug = typeof doc?.slug === 'string' ? doc.slug : ''
+  const path =
+    collection === 'posts'
+      ? `/posts/${slug}`
+      : collection === 'projects'
+        ? `/work/${slug}`
+        : `/${slug}`
 
   const title = doc?.meta?.title
     ? `${doc.meta.title} · Richard Kern`
@@ -37,7 +46,7 @@ export const generateMeta = async (args: {
           ]
         : undefined,
       title,
-      url: Array.isArray(doc?.slug) ? doc?.slug.join('/') : '/',
+      url: `${getServerSideURL()}${path}`,
     }),
     // absolute: the suffix is already applied here; the layout template must not add it again
     title: { absolute: title },

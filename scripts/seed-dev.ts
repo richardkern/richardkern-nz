@@ -309,6 +309,7 @@ const plan = await model.complete({
   // ── Projects ──
   await payload.create({
     collection: 'projects',
+    context: { disableRevalidate: true },
     data: {
       title: 'Harbour Watch',
       slug: 'harbour-watch',
@@ -339,6 +340,7 @@ const plan = await model.complete({
 
   await payload.create({
     collection: 'projects',
+    context: { disableRevalidate: true },
     data: {
       title: 'Rackline',
       slug: 'rackline',
@@ -362,6 +364,7 @@ const plan = await model.complete({
 
   await payload.create({
     collection: 'projects',
+    context: { disableRevalidate: true },
     data: {
       title: 'This site',
       slug: 'this-site',
