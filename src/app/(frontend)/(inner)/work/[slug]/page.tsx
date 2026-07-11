@@ -9,6 +9,7 @@ import React, { cache } from 'react'
 import { Media } from '@/components/Media'
 import { ImageZoom } from '@/components/site/ImageZoom'
 import RichText from '@/components/RichText'
+import { generateMeta } from '@/utilities/generateMeta'
 import { getMediaUrl } from '@/utilities/getMediaUrl'
 
 export async function generateStaticParams() {
@@ -137,10 +138,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const decodedSlug = decodeURIComponent(slug)
   const project = await queryProjectBySlug({ slug: decodedSlug })
 
-  return {
-    title: project?.title ?? 'Project',
-    description: project?.description ?? undefined,
-  }
+  return generateMeta({ doc: project })
 }
 
 const queryProjectBySlug = cache(async ({ slug }: { slug: string }) => {
