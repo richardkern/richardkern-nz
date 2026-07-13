@@ -3,11 +3,13 @@ import { getPayload } from 'payload'
 import Link from 'next/link'
 import React from 'react'
 
+import { JsonLd } from '@/components/JsonLd'
 import { Media } from '@/components/Media'
 import { SocialGlyphs } from '@/components/site/socialLinks'
 import { ThemeToggle } from '@/components/site/ThemeToggle'
 import { Wordmark } from '@/components/site/Wordmark'
 import { getCachedGlobal } from '@/utilities/getGlobals'
+import { homeJsonLd } from '@/utilities/jsonld'
 import { formatEntryNo, formatLogDate } from '@/utilities/logbook'
 import { navLinksFrom } from '@/utilities/navLinks'
 
@@ -54,7 +56,9 @@ export default async function HomePage() {
   const projects = projectsResult.docs
 
   return (
-    <div className="flex flex-1 flex-col md:flex-row">
+    <>
+      <JsonLd data={homeJsonLd(siteSettings)} />
+      <div className="flex flex-1 flex-col md:flex-row">
       {/* Mobile: the spine collapses to a charcoal top bar (mock 6a) */}
       <div
         data-surface="charcoal"
@@ -215,7 +219,8 @@ export default async function HomePage() {
           </div>
         </div>
       </main>
-    </div>
+      </div>
+    </>
   )
 }
 

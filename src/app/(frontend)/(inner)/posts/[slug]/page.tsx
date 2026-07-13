@@ -8,6 +8,7 @@ import Link from 'next/link'
 import React, { cache } from 'react'
 import RichText from '@/components/RichText'
 
+import { JsonLd } from '@/components/JsonLd'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { Media } from '@/components/Media'
 import { ImageZoom } from '@/components/site/ImageZoom'
@@ -15,6 +16,7 @@ import { SocialTextLinks } from '@/components/site/socialLinks'
 import { generateMeta } from '@/utilities/generateMeta'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 import { getMediaUrl } from '@/utilities/getMediaUrl'
+import { postJsonLd } from '@/utilities/jsonld'
 import { formatEntryNo, formatLogDate, getPostNumbers } from '@/utilities/logbook'
 
 export async function generateStaticParams() {
@@ -82,6 +84,7 @@ export default async function PostPage({ params: paramsPromise }: Args) {
     // text keeps its reading measure on the left, the cover sits beside it on the
     // right. Below lg (and for coverless posts) it's a single centred column.
     <article className={articleClass}>
+      <JsonLd data={postJsonLd(post, siteSettings)} />
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
 
