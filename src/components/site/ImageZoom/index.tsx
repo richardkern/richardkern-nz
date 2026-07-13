@@ -10,9 +10,8 @@ import { createPortal } from 'react-dom'
  * site: dark scrim, one paper-dim close control, click-anywhere / Esc to close.
  *
  * The overlay uses a plain <img> pointing at the original media URL rather than
- * the Next optimizer: the lightbox wants the full-res file, and the raw
- * same-origin request carries the browser session (so it clears the pre-launch
- * auth gate that blocks the optimizer's credential-less loopback).
+ * the Next optimizer: the lightbox wants the full-resolution original, not the
+ * optimizer's resized output.
  */
 export const ImageZoom: React.FC<{
   src: string

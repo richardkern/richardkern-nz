@@ -9,7 +9,7 @@ export const DEFAULT_NAV: NavLink[] = [
   { label: 'About', href: '/about' },
 ]
 
-/** Resolve the template link field (reference or custom URL) to a plain href */
+/** Resolve a link field (reference or custom URL) to a plain href */
 export const navLinksFrom = (global: Header | Footer | null | undefined): NavLink[] => {
   const items = global?.navItems ?? []
 

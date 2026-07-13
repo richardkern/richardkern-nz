@@ -37,6 +37,14 @@ export const generateMeta = async (args: {
     ? `${doc.meta.title} · Richard Kern`
     : 'Richard Kern · Projects, notes and writing'
 
+  // Posts are articles, not generic pages: the article og:type (plus
+  // published_time) is the correct signal for shares and crawlers.
+  const isPost = collection === 'posts'
+  const publishedTime =
+    isPost && doc && 'publishedAt' in doc && typeof doc.publishedAt === 'string'
+      ? doc.publishedAt
+      : undefined
+
   return {
     description: doc?.meta?.description,
     openGraph: mergeOpenGraph({
@@ -50,6 +58,7 @@ export const generateMeta = async (args: {
         : undefined,
       title,
       url: `${getServerSideURL()}${path}`,
+      ...(isPost ? { type: 'article' as const, publishedTime } : {}),
     }),
     // absolute: the suffix is already applied here; the layout template must not add it again
     title: { absolute: title },
