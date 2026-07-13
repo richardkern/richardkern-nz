@@ -56,6 +56,24 @@ const nextConfig: NextConfig = {
   },
   reactStrictMode: true,
   redirects,
+  // Baseline security headers. CSP is deliberately omitted — it needs its own
+  // careful pass (Payload admin, next/image, inline theme script). HSTS
+  // includeSubDomains is safe here: every richardkern.nz subdomain is HTTPS
+  // (Cloudflare / the homelab tunnel). SAMEORIGIN keeps the admin live-preview
+  // iframe (same origin) working.
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+        ],
+      },
+    ]
+  },
   turbopack: {
     root: path.resolve(dirname),
   },

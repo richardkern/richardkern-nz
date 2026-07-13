@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: 'Not in the log',
 }
 
-// Header only, no footer — a page missing from the log (mock 5f)
+// Header only, no footer — a page missing from the log
 export default function NotFound() {
   return (
     <div className="flex flex-1 flex-col">

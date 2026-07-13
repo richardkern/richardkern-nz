@@ -6,10 +6,9 @@
  *
  * Media paths must stay relative (e.g. `/api/media/file/image.webp`) so the
  * Next.js image optimizer treats them as local and self-fetches over the
- * internal loopback, rather than fetching the absolute public URL back through
- * the front-door proxy. In production that round-trip hits Coolify/Traefik's
- * pre-launch basic-auth gate and the optimizer gets a 401 ("upstream response
- * is invalid"). Payload emits absolute URLs because `serverURL` is set in the
+ * internal loopback, rather than routing the absolute public URL back out
+ * through the front-door proxy (a wasteful, fragile round-trip from inside the
+ * container). Payload emits absolute URLs because `serverURL` is set in the
  * config, so we strip a same-origin origin back off here before optimization.
  */
 export const getMediaUrl = (url: string | null | undefined, cacheTag?: string | null): string => {
