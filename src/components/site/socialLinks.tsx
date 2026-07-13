@@ -54,6 +54,8 @@ export const SocialGlyphs: React.FC<{ links: SocialLink[]; className?: string }>
           key={i}
           href={hrefFor(link)}
           {...(isEmail(link.platform) ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
+          data-umami-event="social-link"
+          data-umami-event-platform={link.platform.toLowerCase()}
           aria-label={displayName(link.platform)}
           className={cn(
             'relative flex size-[30px] items-center justify-center rounded-full border border-paper-border font-mono text-[9.5px] font-medium text-paper-dim transition-colors hover:border-moss hover:text-paper',
@@ -91,6 +93,8 @@ export const SocialTextLinks: React.FC<{
             key={i}
             href={hrefFor(link)}
             {...(email ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
+            data-umami-event="social-link"
+            data-umami-event-platform={link.platform.toLowerCase()}
             className={cn(
               'font-sans text-[13.5px] font-medium text-accent hover:underline hover:underline-offset-3',
               className,
