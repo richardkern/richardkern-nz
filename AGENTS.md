@@ -94,6 +94,7 @@ Full intent in the vault `Design Spec` (revised 2026-07-06) and `Design Decision
 | `NEXT_PUBLIC_SERVER_URL` | per environment (localhost:3000 / staging domain / richardkern.nz) |
 | `R2_BUCKET`, `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` | Cloudflare R2 dashboard (production/staging only; dev uses local disk) |
 | `RESEND_API_KEY` | Resend dashboard (staging/production; when unset, Payload logs emails to the console — dev default) |
+| `NEXT_PUBLIC_UMAMI_SRC`, `NEXT_PUBLIC_UMAMI_WEBSITE_ID` | Umami dashboard (self-hosted on the Beelink, `analytics.richardkern.nz`). **Production only**, and **build-time** (NEXT_PUBLIC_* inline at build); both must be set or the tracking script renders nothing (dev/staging default). Outbound social-link clicks are tagged `data-umami-event="social-link"` |
 
 ## Common commands
 

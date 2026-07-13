@@ -8,6 +8,7 @@ import { draftMode } from 'next/headers'
 import React from 'react'
 
 import { AdminBar } from '@/components/AdminBar'
+import { Analytics } from '@/components/Analytics'
 import { themeInitScript } from '@/providers/Theme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 
@@ -57,6 +58,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           }}
         />
         {children}
+        <Analytics />
       </body>
     </html>
   )

@@ -6,10 +6,13 @@ import { getPayload } from 'payload'
 import Link from 'next/link'
 import React, { cache } from 'react'
 
+import { JsonLd } from '@/components/JsonLd'
 import { Media } from '@/components/Media'
 import { ImageZoom } from '@/components/site/ImageZoom'
 import RichText from '@/components/RichText'
 import { generateMeta } from '@/utilities/generateMeta'
+import { getCachedGlobal } from '@/utilities/getGlobals'
+import { projectJsonLd } from '@/utilities/jsonld'
 import { getMediaUrl } from '@/utilities/getMediaUrl'
 
 export async function generateStaticParams() {
@@ -42,6 +45,8 @@ export default async function ProjectPage({ params: paramsPromise }: Args) {
 
   if (!project) return <PayloadRedirects url={url} />
 
+  const siteSettings = await getCachedGlobal('site-settings', 0)()
+
   const tech = (project.tech ?? []).map((t) => t.label).join(' · ')
   const gallery = (project.images ?? []).filter(
     (item) => item.image && typeof item.image === 'object',
@@ -49,6 +54,7 @@ export default async function ProjectPage({ params: paramsPromise }: Args) {
 
   return (
     <article className="mx-auto w-full max-w-220 px-6 pt-12 pb-16 md:pt-17 md:pb-19">
+      <JsonLd data={projectJsonLd(project, siteSettings)} />
       <PayloadRedirects disableNotFound url={url} />
 
       <p className="font-mono text-[12px] text-muted">

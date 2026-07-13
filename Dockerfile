@@ -21,6 +21,10 @@ ARG DATABASE_URL
 ARG PAYLOAD_SECRET
 ARG CRON_SECRET
 ARG NEXT_PUBLIC_SERVER_URL
+# Umami analytics: NEXT_PUBLIC_* are inlined at build, so the tracking script
+# only renders when both are set at build time (production only).
+ARG NEXT_PUBLIC_UMAMI_SRC
+ARG NEXT_PUBLIC_UMAMI_WEBSITE_ID
 # R2 vars keep the build-time Payload config identical to runtime
 # (media collection storage switches on when all four are present)
 ARG R2_BUCKET
@@ -31,6 +35,8 @@ ENV DATABASE_URL=$DATABASE_URL \
     PAYLOAD_SECRET=$PAYLOAD_SECRET \
     CRON_SECRET=$CRON_SECRET \
     NEXT_PUBLIC_SERVER_URL=$NEXT_PUBLIC_SERVER_URL \
+    NEXT_PUBLIC_UMAMI_SRC=$NEXT_PUBLIC_UMAMI_SRC \
+    NEXT_PUBLIC_UMAMI_WEBSITE_ID=$NEXT_PUBLIC_UMAMI_WEBSITE_ID \
     R2_BUCKET=$R2_BUCKET \
     R2_ACCOUNT_ID=$R2_ACCOUNT_ID \
     R2_ACCESS_KEY_ID=$R2_ACCESS_KEY_ID \
