@@ -1,0 +1,57 @@
+# Dependabot version updates.
+# Security alerts/updates are enabled separately in repo Settings > Security
+# and always target the default branch (main), regardless of the
+# `target-branch` below (a GitHub constraint).
+#
+# Version-update PRs target `develop` to match the develop -> main workflow:
+# they flow through staging before production, and it stops `main` drifting
+# ahead of `develop` (which is what happens when dependency PRs merge straight
+# to `main`). Dependabot still reads this config from the default branch.
+#
+# Grouping keeps this to ~1 PR per ecosystem per week instead of a flood.
+# The `payload` group is deliberate: `payload` and every `@payloadcms/*`
+# package must move in lockstep (Payload's runtime dependency checker fails
+# silently on a mismatch), majors included.
+version: 2
+updates:
+  # GitHub Actions used by CI and the Claude workflows.
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: develop
+    schedule:
+      interval: weekly
+    labels:
+      - dependencies
+    groups:
+      actions:
+        patterns:
+          - "*"
+
+  # Root app: Next.js + Payload (pnpm, pnpm-lock.yaml).
+  - package-ecosystem: npm
+    directory: /
+    target-branch: develop
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+    groups:
+      # Lockstep: payload core + all official plugins/adapters in one PR,
+      # majors included (they must never move independently).
+      payload:
+        patterns:
+          - "payload"
+          - "@payloadcms/*"
+      # Everything else: minor + patch grouped to cut noise.
+      # Non-payload majors are intentionally left out so they arrive as
+      # individual PRs that get reviewed on their own.
+      minor-and-patch:
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "payload"
+          - "@payloadcms/*"
+        update-types:
+          - minor
+          - patch
