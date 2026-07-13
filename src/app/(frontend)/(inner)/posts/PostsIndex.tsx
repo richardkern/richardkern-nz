@@ -15,7 +15,7 @@ type Props = {
 }
 
 /**
- * Shared renderer for /posts and /posts/page/[n] — the logbook index (mock 5b).
+ * Shared renderer for /posts and /posts/page/[n] — the logbook index.
  * The tag filter (?tag=) shows all matches unpaginated; entry N° stays the
  * post's real chronological position either way.
  */

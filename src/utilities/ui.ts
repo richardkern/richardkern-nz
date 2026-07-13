@@ -1,7 +1,7 @@
 /**
- * Utility functions for UI components automatically added by ShadCN and used in a few of our frontend components and blocks.
- *
- * Other functions may be exported from here in the future or by installing other shadcn components.
+ * `cn` merges Tailwind class lists, resolving conflicts: clsx flattens
+ * conditional/array inputs, tailwind-merge makes the last of any conflicting
+ * utilities win.
  */
 
 import { type ClassValue, clsx } from 'clsx'

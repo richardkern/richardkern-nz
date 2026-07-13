@@ -59,7 +59,7 @@ export default async function HomePage() {
     <>
       <JsonLd data={homeJsonLd(siteSettings)} />
       <div className="flex flex-1 flex-col md:flex-row">
-      {/* Mobile: the spine collapses to a charcoal top bar (mock 6a) */}
+      {/* Mobile: the spine collapses to a charcoal top bar */}
       <div
         data-surface="charcoal"
         className="flex items-center justify-between bg-structural px-5 py-3 md:hidden"
