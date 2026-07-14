@@ -7,6 +7,8 @@ import { NextRequest } from 'next/server'
 
 import configPromise from '@payload-config'
 
+import { secretEqual } from '@/utilities/secretEqual'
+
 export type PreviewSearchParams = {
   path: string
   previewSecret: string
@@ -20,7 +22,7 @@ export async function GET(req: NextRequest): Promise<Response> {
   const path = searchParams.get('path')
   const previewSecret = searchParams.get('previewSecret')
 
-  if (previewSecret !== process.env.PREVIEW_SECRET) {
+  if (!secretEqual(previewSecret, process.env.PREVIEW_SECRET)) {
     return new Response('You are not allowed to preview this page', { status: 403 })
   }
 
