@@ -76,12 +76,39 @@ const nextConfig: NextConfig = {
       { source: '/stats/api/send', destination: `${umamiHost}/api/send` },
     ]
   },
-  // Baseline security headers. CSP is deliberately omitted — it needs its own
-  // careful pass (Payload admin, next/image, inline theme script). HSTS
+  // Baseline security headers + a Content-Security-Policy (issue #50). HSTS
   // includeSubDomains is safe here: every richardkern.nz subdomain is HTTPS
   // (Cloudflare / the homelab tunnel). SAMEORIGIN keeps the admin live-preview
   // iframe (same origin) working.
+  //
+  // The CSP ships **Report-Only** first: it never blocks, it only reports
+  // violations to /api/csp-report, so we can watch real traffic (public pages,
+  // the Payload admin, draft preview) before switching the header key to the
+  // enforcing `Content-Security-Policy`. Everything the site loads is
+  // first-party — media is proxied same-origin through /api/media, fonts and the
+  // Umami tracker are served from our own origin — so sources are 'self'.
+  // `script-src`/`style-src` keep 'unsafe-inline': the app renders statically
+  // (force-static / ISR), and a nonce would force every page dynamic. That's the
+  // deliberate trade-off; strengthening script-src is a later, separate call. No
+  // `upgrade-insecure-requests` so local http dev is unaffected.
   async headers() {
+    const csp = [
+      "default-src 'self'",
+      "base-uri 'self'",
+      "object-src 'none'",
+      "frame-ancestors 'self'",
+      "form-action 'self'",
+      "img-src 'self' data:",
+      "font-src 'self'",
+      "style-src 'self' 'unsafe-inline'",
+      "script-src 'self' 'unsafe-inline'",
+      "connect-src 'self'",
+      "frame-src 'self'",
+      "worker-src 'self' blob:",
+      "manifest-src 'self'",
+      'report-uri /csp-report',
+    ].join('; ')
+
     return [
       {
         source: '/:path*',
@@ -90,6 +117,7 @@ const nextConfig: NextConfig = {
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          { key: 'Content-Security-Policy-Report-Only', value: csp },
         ],
       },
     ]
