@@ -58,6 +58,24 @@ const nextConfig: NextConfig = {
   },
   reactStrictMode: true,
   redirects,
+  // First-party Umami proxy (issue #44). Serve the tracker script and its collect
+  // beacon under our own origin so ad-blocker filter lists (which key on the
+  // analytics hostname) can't drop them and undercount blocker-running visitors.
+  // The tracker derives its /api/send endpoint from the script's own directory, so
+  // proxying both under /stats/* is enough — no data-host-url needed. Gated on
+  // UMAMI_HOST_URL, which is BUILD-TIME (rewrites bake into the routes manifest at
+  // build): set it as a Docker build arg alongside NEXT_PUBLIC_UMAMI_WEBSITE_ID, or
+  // /stats/script.js 404s and analytics silently stop. `/stats` is the one filter-
+  // evasion knob — rename it here and in components/Analytics.tsx together if a list
+  // ever catches it.
+  async rewrites() {
+    const umamiHost = process.env.UMAMI_HOST_URL?.replace(/\/$/, '')
+    if (!umamiHost) return []
+    return [
+      { source: '/stats/script.js', destination: `${umamiHost}/script.js` },
+      { source: '/stats/api/send', destination: `${umamiHost}/api/send` },
+    ]
+  },
   // Baseline security headers. CSP is deliberately omitted — it needs its own
   // careful pass (Payload admin, next/image, inline theme script). HSTS
   // includeSubDomains is safe here: every richardkern.nz subdomain is HTTPS
