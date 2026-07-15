@@ -23,7 +23,7 @@ export const generateMeta = async (args: {
 }): Promise<Metadata> => {
   const { doc, collection } = args
 
-  const ogImage = getImageURL(doc?.meta?.image)
+  const uploadedImage = getImageURL(doc?.meta?.image)
 
   const slug = typeof doc?.slug === 'string' ? doc.slug : ''
   const path =
@@ -32,6 +32,14 @@ export const generateMeta = async (args: {
       : collection === 'projects'
         ? `/work/${slug}`
         : `/${slug}`
+
+  // Posts and projects without an uploaded social image get a generated OG card
+  // (issue #47, /og/<type>/<slug>). An uploaded meta.image still wins; pages fall
+  // back to the generic og-default.png via mergeOpenGraph.
+  const ogType = collection === 'posts' ? 'post' : collection === 'projects' ? 'work' : null
+  const generatedImage =
+    !uploadedImage && ogType && slug ? `${getServerSideURL()}/og/${ogType}/${slug}` : undefined
+  const ogImage = uploadedImage || generatedImage
 
   const title = doc?.meta?.title
     ? `${doc.meta.title} · Richard Kern`
@@ -53,6 +61,8 @@ export const generateMeta = async (args: {
         ? [
             {
               url: ogImage,
+              width: 1200,
+              height: 630,
             },
           ]
         : undefined,
