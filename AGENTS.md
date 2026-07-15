@@ -96,7 +96,7 @@ Full intent in the vault `Design Spec` (revised 2026-07-06) and `Design Decision
 | `NEXT_PUBLIC_SERVER_URL` | per environment (localhost:3000 / staging domain / richardkern.nz) |
 | `R2_BUCKET`, `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` | Cloudflare R2 dashboard (production/staging only; dev uses local disk) |
 | `RESEND_API_KEY` | Resend dashboard (staging/production; when unset, Payload logs emails to the console — dev default) |
-| `NEXT_PUBLIC_UMAMI_SRC`, `NEXT_PUBLIC_UMAMI_WEBSITE_ID` | self-hosted Umami dashboard. **Production only**, and **build-time** (NEXT_PUBLIC_* inline at build); both must be set or the tracking script renders nothing (dev/staging default). Outbound social-link clicks are tagged `data-umami-event="social-link"` |
+| `UMAMI_HOST_URL`, `NEXT_PUBLIC_UMAMI_WEBSITE_ID` | self-hosted Umami. **Production only**, and **build-time** (both bake in at build — mark build-time in Coolify); both must be set or the tracker renders nothing (dev/staging default). Umami is served **first-party**: `UMAMI_HOST_URL` (server-only, e.g. `https://analytics.richardkern.nz`) is the proxy target for the next.config `/stats/script.js` + `/stats/api/send` rewrites, so the client only ever hits our own origin and ad-blockers can't drop it by hostname. If `UMAMI_HOST_URL` is unset the proxy is absent and `/stats/script.js` 404s. Outbound social-link clicks are tagged `data-umami-event="social-link"` |
 
 ## Common commands
 
