@@ -1,11 +1,12 @@
 /**
- * Dev-only test data so every frontend surface has content behind it
- * (Phase 02 "load realistic test data"). Run with:
+ * Dev-only test data so every frontend surface has content behind it.
+ * Run against a freshly wiped database:
  *
- *   pnpm payload run scripts/seed-dev.ts
+ *   docker compose down -v && docker compose up -d
+ *   ./node_modules/.bin/tsx scripts/seed-dev.ts
  *
- * Idempotent-ish: intended for a freshly wiped database
- * (docker compose down -v && docker compose up -d).
+ * Use tsx, not `payload run` (it exits silently in this repo); the script
+ * loads dotenv itself. Intended for a fresh database, not an incremental reseed.
  */
 import 'dotenv/config'
 import { getPayload } from 'payload'
