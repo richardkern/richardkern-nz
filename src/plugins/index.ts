@@ -43,7 +43,8 @@ export const plugins: Plugin[] = [
             return {
               ...field,
               admin: {
-                description: 'You will need to rebuild the website when changing this field.',
+                description:
+                  'The path to redirect from, e.g. /old-post. Changes take effect immediately on save — the revalidateRedirects hook refreshes the cache, no rebuild needed.',
               },
             }
           }
