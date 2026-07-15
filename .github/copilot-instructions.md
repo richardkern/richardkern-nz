@@ -7,13 +7,13 @@ official Payload Website Template but with `Categories` replaced by a flat `Tags
 `.claude/skills/payload/reference/` for detailed docs (COLLECTIONS.md, FIELDS.md, HOOKS.md,
 ACCESS-CONTROL.md, QUERIES.md, ADAPTERS.md, ADVANCED.md, PLUGIN-DEVELOPMENT.md).
 
-Note: `README.md` is the stock template README and is out of date in places (e.g. it still
-describes a `Categories` collection). Prefer this file and the code itself over the README.
+`README.md` is a maintained project overview. For anything it doesn't cover, prefer this file
+and the code itself.
 
 ## Stack
 
 - Next.js 16 App Router, Payload CMS 3.x, PostgreSQL (`@payloadcms/db-postgres`)
-- Tailwind 4 + shadcn/ui, Geist Sans/Mono fonts loaded globally
+- Tailwind 4 (no shadcn/ui — only the `cn` clsx+tailwind-merge helper remains), Geist Sans/Mono fonts loaded globally
 - pnpm 11, Node.js 24+
 
 ## Local dev

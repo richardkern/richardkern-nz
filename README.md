@@ -7,7 +7,7 @@ Live at [richardkern.nz](https://richardkern.nz).
 ## Stack
 
 - **Next.js 16** (App Router) + **Payload CMS 3** on **PostgreSQL 17**
-- **Tailwind 4** + shadcn/ui, with a custom "Cover & Pages" design and a real light/dark theme
+- **Tailwind 4** with a custom "Cover & Pages" design and a real light/dark theme
 - **pnpm 11**, **Node 24+**
 - Media on **Cloudflare R2** (local disk in dev), email via **Resend**
 - Deployed to a VPS via **Coolify**: `develop` → staging, `main` → production

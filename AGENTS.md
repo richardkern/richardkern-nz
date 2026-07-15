@@ -4,7 +4,7 @@ Instructions for any AI coding agent working in this repo. Tool-specific overrid
 
 ## What this is
 
-richardkern.nz — Richard's personal site: a blog covering both technical material (homelab, AI agents, web dev) and personal reflection (running, aviation, building things for their own sake — deliberate scope, not drift), plus a portfolio of what he's built. Planning docs live in the Obsidian vault at `/Users/richardkern/vaults/richard-kb/30 - Projects/Personal Site/` — the PRD, Design Spec, and Build Plan there are the source of truth for *why*; this file summarises *what*.
+richardkern.nz — Richard's personal site: a blog covering both technical material (homelab, AI agents, web dev) and personal reflection (running, aviation, building things for their own sake — deliberate scope, not drift), plus a portfolio of what he's built. Planning docs live in a private Obsidian vault (`30 - Projects/Personal Site/`) — the PRD, Design Spec, and Build Plan there are the source of truth for *why*; this file summarises *what*.
 
 ## Stack (finalised — do not re-litigate)
 
