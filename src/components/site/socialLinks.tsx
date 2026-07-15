@@ -42,10 +42,12 @@ const hrefFor = (link: SocialLink): string => {
  * Circled mono glyphs (gh / in / @) — the spine rail and the mobile top bar.
  * The visible circle is 28–30px; an invisible inset extends the tap target to ≥44px.
  */
-export const SocialGlyphs: React.FC<{ links: SocialLink[]; className?: string }> = ({
-  links,
-  className,
-}) => {
+export const SocialGlyphs: React.FC<{
+  links: SocialLink[]
+  /** Which surface the glyphs sit on. Defaults to charcoal (the spine/top bar). */
+  surface?: 'paper' | 'charcoal'
+  className?: string
+}> = ({ links, surface = 'charcoal', className }) => {
   if (links.length === 0) return null
   return (
     <>
@@ -58,7 +60,10 @@ export const SocialGlyphs: React.FC<{ links: SocialLink[]; className?: string }>
           data-umami-event-platform={link.platform.toLowerCase()}
           aria-label={displayName(link.platform)}
           className={cn(
-            'relative flex size-[30px] items-center justify-center rounded-full border border-paper-border font-mono text-[9.5px] font-medium text-paper-dim transition-colors hover:border-moss hover:text-paper',
+            'relative flex size-[30px] items-center justify-center rounded-full border font-mono text-[9.5px] font-medium transition-colors',
+            surface === 'charcoal'
+              ? 'border-paper-border text-paper-dim hover:border-moss hover:text-paper'
+              : 'border-rule-strong text-muted hover:border-accent hover:text-accent',
             'before:absolute before:-inset-2 before:content-[""]',
             className,
           )}

@@ -27,7 +27,14 @@ export const Media: CollectionConfig = {
     {
       name: 'alt',
       type: 'text',
-      //required: true,
+      // Enforced with validate rather than `required: true` so no NOT NULL
+      // migration is needed and existing rows aren't broken; new/edited media
+      // must carry alt text (screen-reader accessible name). Decorative images
+      // are rare here — covers and content images all convey meaning.
+      validate: (value: string | null | undefined) =>
+        value && value.trim().length > 0
+          ? true
+          : 'Alt text is required so the image has an accessible name.',
     },
     {
       name: 'caption',

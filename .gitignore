@@ -26,5 +26,8 @@ node_modules/
 # Claude Code local settings
 .claude/settings.local.json
 
+# impeccable live-mode local session/recovery state (config + design context stay tracked)
+.impeccable/live/sessions/
+
 # Internal design/handoff artifacts (kept in the Obsidian vault, not the repo)
 *.zip

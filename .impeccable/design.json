@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-15T00:00:00.000Z",
+  "title": "Design System: richardkern.nz",
+  "extensions": {
+    "colorMeta": {
+      "bush-charcoal": {
+        "role": "neutral",
+        "displayName": "Bush Charcoal",
+        "canonical": "#171b16",
+        "tonalRamp": ["#0c0f0b", "#171b16", "#22261f", "#333831", "#494f45", "#5e6459", "#8a9084", "#c7cbc2"]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#f7f5ef",
+        "tonalRamp": ["#d9d5c9", "#e4e0d5", "#eeeae0", "#f7f5ef", "#faf8f3", "#fcfbf7", "#fdfcf9", "#ffffff"]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#22261f",
+        "tonalRamp": ["#0e100b", "#171b13", "#22261f", "#333830", "#474d43", "#5e6459", "#8b9184", "#c8ccc3"]
+      },
+      "haze": {
+        "role": "neutral",
+        "displayName": "Haze",
+        "canonical": "#5e6459",
+        "tonalRamp": ["#2b2f28", "#3a3f37", "#4a4f46", "#5e6459", "#757b6f", "#8f948a", "#b2b6ad", "#d6d8d2"]
+      },
+      "fern": {
+        "role": "primary",
+        "displayName": "Fern",
+        "canonical": "#2a5a43",
+        "tonalRamp": ["#0e2016", "#15301f", "#1e4230", "#2a5a43", "#3d7358", "#5f9078", "#8fb8a5", "#c3ddd0"]
+      },
+      "moss": {
+        "role": "primary",
+        "displayName": "Moss",
+        "canonical": "#8fb8a5",
+        "tonalRamp": ["#24352d", "#365044", "#4a6b5b", "#628a76", "#7ba591", "#8fb8a5", "#b0cebf", "#d6e6dd"]
+      },
+      "structural-lifted": {
+        "role": "neutral",
+        "displayName": "Structural Lifted (dark mode)",
+        "canonical": "#20261e"
+      },
+      "code-string": {
+        "role": "tertiary",
+        "displayName": "Code String (warm sand)",
+        "canonical": "#d9c79e"
+      },
+      "code-comment": {
+        "role": "tertiary",
+        "displayName": "Code Comment (grey-green)",
+        "canonical": "#98a19b"
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Homepage name only. The single largest thing on the site." },
+      "headline": { "displayName": "Headline", "purpose": "Prose h2 in posts and pages." },
+      "title": { "displayName": "Title", "purpose": "Prose h3 and smaller section headings." },
+      "body": { "displayName": "Body", "purpose": "Long-form reading — Source Serif 4 at a comfortable measure." },
+      "label": { "displayName": "Label", "purpose": "Nav links and the two homepage section labels. Used sparingly." },
+      "logbook": { "displayName": "Logbook", "purpose": "Everything about an entry — N°, dates, filenames — in Geist Mono." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "home-reveal", "value": "0.45s ease-out both (stagger 0.08s)", "purpose": "The single considered motion moment — homepage name → bio → columns. Disabled under prefers-reduced-motion." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" },
+      { "name": "2xl", "value": "1376px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Nav Link",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Header/footer text link; active state is a fern underline, hover shifts to accent.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-link\" href=\"#\">Posts</a><a class=\"ds-nav-link ds-nav-link--active\" aria-current=\"page\" href=\"#\">Work</a><a class=\"ds-nav-link\" href=\"#\">About</a></nav>",
+      "css": ".ds-nav { display: flex; gap: 34px; } .ds-nav-link { font-family: 'Geist Sans', ui-sans-serif, sans-serif; font-size: 13px; font-weight: 500; color: #22261f; text-decoration: none; transition: color 0.2s; } .ds-nav-link:hover, .ds-nav-link:focus-visible { color: #2a5a43; } .ds-nav-link--active { color: #2a5a43; text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 6px; }"
+    },
+    {
+      "name": "Theme Toggle",
+      "kind": "custom",
+      "refersTo": "theme-toggle",
+      "description": "30px circular control; cycles light → dark → system. Border and icon shift to accent on hover.",
+      "html": "<button class=\"ds-theme-toggle\" aria-label=\"Theme: Light. Switch to Dark.\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"4.2\"/><path d=\"M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4\"/></svg></button>",
+      "css": ".ds-theme-toggle { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 9999px; border: 1px solid rgba(34,38,31,0.12); color: #5e6459; background: transparent; cursor: pointer; transition: color 0.2s, border-color 0.2s; } .ds-theme-toggle:hover, .ds-theme-toggle:focus-visible { color: #2a5a43; border-color: #2a5a43; outline: none; }"
+    },
+    {
+      "name": "Code Block",
+      "kind": "custom",
+      "refersTo": "code-block",
+      "description": "Charcoal code surface with an in-family syntax palette (moss keywords, warm-sand strings, grey-green comments) and a mono filename caption.",
+      "html": "<div class=\"ds-code-block\"><p class=\"ds-code-filename\">payload.config.ts</p><pre class=\"ds-code-pre\"><span class=\"ds-kw\">export</span> <span class=\"ds-kw\">const</span> config = <span class=\"ds-str\">buildConfig</span>({\n  <span class=\"ds-com\">// one paper surface, one accent</span>\n  serverURL,\n})</pre></div>",
+      "css": ".ds-code-block { background: #171b16; border-radius: 6px; padding: 24px 28px; } .ds-code-filename { margin: 0 0 14px; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: 0.08em; color: rgba(247,245,239,0.4); } .ds-code-pre { margin: 0; overflow-x: auto; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 14px; line-height: 1.75; color: #e9e7e0; } .ds-kw { color: #8fb8a5; } .ds-str { color: #d9c79e; } .ds-com { color: #98a19b; }"
+    },
+    {
+      "name": "Logbook Entry",
+      "kind": "custom",
+      "refersTo": "logbook-entry",
+      "description": "Signature list row: a mono meta column (N° over date) beside a serif title, hairline-divided. The site's list pattern instead of cards.",
+      "html": "<a class=\"ds-logbook-entry\" href=\"#\"><span class=\"ds-logbook-meta\">N°07<br>28.06</span><span class=\"ds-logbook-title\">Running a homelab behind a Cloudflare Tunnel</span></a>",
+      "css": ".ds-logbook-entry { display: grid; grid-template-columns: 96px 1fr; gap: 18px; padding: 14px 0; border-bottom: 1px solid rgba(34,38,31,0.07); text-decoration: none; } .ds-logbook-meta { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 11px; line-height: 1.9; color: #5e6459; } .ds-logbook-title { align-self: center; font-family: 'Source Serif 4', Georgia, serif; font-size: 16px; line-height: 1.45; color: #22261f; transition: color 0.2s; } .ds-logbook-entry:hover .ds-logbook-title { color: #2a5a43; }"
+    },
+    {
+      "name": "Tag Filter",
+      "kind": "chip",
+      "refersTo": "nav-link",
+      "description": "The /posts tag filter — text links, never filled pills. Active tag is accent + underline; an 'All' link resets.",
+      "html": "<nav class=\"ds-tag-filter\" aria-label=\"Filter by tag\"><a class=\"ds-tag ds-tag--active\" href=\"#\">All</a><a class=\"ds-tag\" href=\"#\">homelab</a><a class=\"ds-tag\" href=\"#\">ai agents</a><a class=\"ds-tag\" href=\"#\">running</a></nav>",
+      "css": ".ds-tag-filter { display: flex; flex-wrap: wrap; gap: 8px 22px; padding-bottom: 14px; border-bottom: 1px solid rgba(34,38,31,0.09); } .ds-tag { font-family: 'Geist Sans', ui-sans-serif, sans-serif; font-size: 13px; color: #5e6459; text-decoration: none; transition: color 0.2s; } .ds-tag:hover, .ds-tag:focus-visible { color: #2a5a43; } .ds-tag--active { font-weight: 500; color: #2a5a43; text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 5px; }"
+    },
+    {
+      "name": "Post Meta Line",
+      "kind": "custom",
+      "refersTo": "logbook-entry",
+      "description": "The logbook line above every post title: N° · date · tags, in Geist Mono. Tags are accent links; middot separators are aria-hidden.",
+      "html": "<p class=\"ds-meta-line\"><span>N°07</span><span class=\"ds-meta-sep\" aria-hidden=\"true\"> · </span><time>28.06.2026</time><span class=\"ds-meta-sep\" aria-hidden=\"true\"> · </span><a class=\"ds-meta-tag\" href=\"#\">homelab</a></p>",
+      "css": ".ds-meta-line { margin: 0; font-family: 'Geist Mono', ui-monospace, monospace; font-size: 12px; letter-spacing: 0.04em; color: #5e6459; } .ds-meta-sep { white-space: pre; } .ds-meta-tag { color: #2a5a43; text-decoration: none; } .ds-meta-tag:hover, .ds-meta-tag:focus-visible { text-decoration: underline; }"
+    },
+    {
+      "name": "Wordmark",
+      "kind": "custom",
+      "refersTo": "nav-link",
+      "description": "The mono lowercase wordmark; the .nz takes the surface accent (fern on paper).",
+      "html": "<span class=\"ds-wordmark\">richardkern<span class=\"ds-wordmark-tld\">.nz</span></span>",
+      "css": ".ds-wordmark { font-family: 'Geist Mono', ui-monospace, monospace; font-weight: 500; font-size: 16px; text-transform: lowercase; letter-spacing: 0.02em; color: #22261f; } .ds-wordmark-tld { color: #2a5a43; }"
+    },
+    {
+      "name": "Section Label",
+      "kind": "custom",
+      "refersTo": "nav-link",
+      "description": "The deliberate uppercase label used only as the two homepage rail headings; part of the logbook system, not a per-section eyebrow.",
+      "html": "<h2 class=\"ds-section-label\">Writing</h2>",
+      "css": ".ds-section-label { margin: 0 0 4px; padding-bottom: 10px; border-bottom: 1px solid rgba(34,38,31,0.12); font-family: 'Geist Sans', ui-sans-serif, sans-serif; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.16em; color: #5e6459; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Cover & Pages, with a logbook",
+    "overview": "The site is a bound notebook. A single warm paper surface carries all the reading; charcoal appears only where the object is structural or technical — the vertical spine down the homepage, the footer, and code blocks — like the cover and binding of a physical book. That charcoal-against-paper contrast is the signature move and the only structural device. Over the top runs a logbook layer: everything about an entry (its number, dates, tech, filenames) is set small in Geist Mono, while everything in an entry is serif. The mood is quiet and editorial — the calm of a well-made magazine, not the flatness of a tool. It reads as understated, precise, and warm.",
+    "keyCharacteristics": [
+      "One paper reading surface throughout; charcoal reserved for structural/technical zones only.",
+      "A mono logbook layer (N°, dates, filenames) over a serif reading layer.",
+      "Flat by default: sharp corners, hairline rules, no shadows.",
+      "Theme-aware semantic tokens that flip light↔dark in place; the accent flips fern→moss because fern fails AA on charcoal.",
+      "Restraint as identity: a single considered motion moment (the homepage reveal), and nothing else moves."
+    ],
+    "rules": [
+      { "name": "The Structural-Charcoal Rule", "body": "Charcoal is earned, not decorative. It appears only where the site is structural or technical — the homepage spine, the footer, and code blocks. Never add a fourth charcoal device to a page.", "section": "colors" },
+      { "name": "The Two-Accent Rule", "body": "Fern on paper, moss on charcoal — never the reverse. Every accent decision is settled by which surface it sits on.", "section": "colors" },
+      { "name": "The Logbook Rule", "body": "Everything about an entry is Geist Mono; everything in an entry is Source Serif 4. Metadata never borrows the serif; prose never borrows the mono.", "section": "typography" },
+      { "name": "The One-Display Rule", "body": "The clamp display scale (up to 6.75rem) is reserved for the homepage name. Two competing display moments on one page is prohibited.", "section": "typography" },
+      { "name": "The No-Shadow Rule", "body": "Surfaces never lift with a shadow. If something needs to feel distinct, change its material (paper vs charcoal) or divide it with a hairline rule.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do reserve charcoal for structural/technical zones only — spine, footer, code.",
+      "Do style page surfaces with the semantic theme-aware tokens (bg-surface, text-body, text-muted, text-accent, bg-structural, border-hairline/rule) so light↔dark flips in place. Use the raw anchors (text-paper*, text-moss) only on the always-dark structural panels.",
+      "Do keep the logbook split absolute: mono for everything about an entry, serif for everything in it.",
+      "Do stay flat — divide with hairline rules and material contrast, never a shadow.",
+      "Do keep motion to the single homepage reveal, with its prefers-reduced-motion fallback intact.",
+      "Do verify fern holds AA on paper and moss holds AA on charcoal before using an accent on a new surface."
+    ],
+    "donts": [
+      "Don't make it look like the generic dev-portfolio template — no neon-gradient hero, skill bars, or 'Full-Stack Developer' banner.",
+      "Don't make it look like a SaaS/startup marketing site — no tracked-uppercase eyebrow above every section, no hero-metric grid, no CTA-stuffed landing page.",
+      "Don't make it look like a loud personal-brand influencer page — no big face, no hustle energy, no newsletter popup.",
+      "Don't make it look like a sterile corporate blog — keep the point of view and the handmade detail.",
+      "Don't add gradient text, background-clip: text, glassmorphism, or decorative blur.",
+      "Don't use border-left/border-right side-stripes on cards or callouts, and don't reach for identical card grids.",
+      "Don't put fern text on charcoal or moss text on paper; the Two-Accent Rule is settled by surface.",
+      "Don't introduce a second display-scale heading on a page, or a fourth charcoal device."
+    ]
+  }
+}

@@ -64,12 +64,12 @@ export async function PostsIndex({ page = 1, tag }: Props) {
       {tags.length > 0 && (
         <nav
           aria-label="Filter by tag"
-          className="mt-5 flex flex-wrap gap-x-[22px] gap-y-2 border-b border-rule pb-3.5 md:mt-[26px]"
+          className="mt-5 flex flex-wrap gap-x-[22px] gap-y-2.5 border-b border-rule pb-3.5 md:mt-[26px]"
         >
           <Link
             href="/posts"
             className={cn(
-              '-my-2 py-2 font-sans text-[13px]',
+              '-my-2.5 py-2.5 font-sans text-[13px]',
               !tag
                 ? 'font-medium text-accent underline decoration-[1.5px] underline-offset-[5px]'
                 : 'text-muted transition-colors hover:text-accent',
@@ -82,7 +82,7 @@ export async function PostsIndex({ page = 1, tag }: Props) {
               key={t.id}
               href={`/posts?tag=${t.slug}`}
               className={cn(
-                '-my-2 py-2 font-sans text-[13px]',
+                '-my-2.5 py-2.5 font-sans text-[13px]',
                 tag === t.slug
                   ? 'font-medium text-accent underline decoration-[1.5px] underline-offset-[5px]'
                   : 'text-muted transition-colors hover:text-accent',
@@ -116,8 +116,8 @@ export async function PostsIndex({ page = 1, tag }: Props) {
               )}
               {post.publishedAt && formatLogDate(post.publishedAt, 'short')}
             </span>
-            <span>
-              <h2 className="font-display text-[19px] leading-[1.25] font-semibold tracking-[-0.02em] text-body transition-colors group-hover:text-accent md:text-[22px]">
+            <span className="min-w-0">
+              <h2 className="font-display text-[19px] leading-[1.25] font-semibold tracking-[-0.02em] break-words text-body transition-colors group-hover:text-accent md:text-[22px]">
                 {post.title}
               </h2>
               {post.meta?.description && (
@@ -145,24 +145,24 @@ export async function PostsIndex({ page = 1, tag }: Props) {
           <span className="font-mono text-[12.5px] text-muted">
             p.{posts.page} / {posts.totalPages}
           </span>
-          <span className="flex gap-6">
+          <nav aria-label="Pagination" className="flex gap-6">
             {(posts.page ?? 1) > 1 && (
               <Link
                 href={(posts.page ?? 1) === 2 ? '/posts' : `/posts/page/${(posts.page ?? 1) - 1}`}
-                className="font-sans text-[13px] font-medium text-accent hover:underline"
+                className="-my-2 inline-block py-2 font-sans text-[13px] font-medium text-accent hover:underline"
               >
-                ← Newer
+                <span aria-hidden="true">←</span> Newer
               </Link>
             )}
             {(posts.page ?? 1) < posts.totalPages && (
               <Link
                 href={`/posts/page/${(posts.page ?? 1) + 1}`}
-                className="font-sans text-[13px] font-medium text-accent hover:underline"
+                className="-my-2 inline-block py-2 font-sans text-[13px] font-medium text-accent hover:underline"
               >
-                Older →
+                Older <span aria-hidden="true">→</span>
               </Link>
             )}
-          </span>
+          </nav>
         </div>
       )}
     </div>

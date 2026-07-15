@@ -1,5 +1,3 @@
-'use client'
-
 import type { StaticImageData } from 'next/image'
 
 import { cn } from '@/utilities/ui'
@@ -52,6 +50,7 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
     pictureClassName,
     imgClassName,
     priority,
+    quality = 75,
     resource,
     size: sizeFromProps,
     src: srcFromProps,
@@ -68,7 +67,9 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
 
     width = fullWidth!
     height = fullHeight!
-    alt = altFromResource || ''
+    // Resource alt wins; a caller-supplied alt is the fallback (e.g. a title on
+    // a cover image) so a meaningful image is never left with alt="".
+    alt = altFromResource || altFromProps || ''
 
     const cacheTag = resource.updatedAt
 
@@ -94,7 +95,7 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
         placeholder="blur"
         blurDataURL={placeholderBlur}
         priority={priority}
-        quality={100}
+        quality={quality}
         loading={loading}
         sizes={sizes}
         src={src}
