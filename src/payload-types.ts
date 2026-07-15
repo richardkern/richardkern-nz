@@ -502,7 +502,7 @@ export interface User {
 export interface Redirect {
   id: number;
   /**
-   * You will need to rebuild the website when changing this field.
+   * The path to redirect from, e.g. /old-post. Changes take effect immediately on save — the revalidateRedirects hook refreshes the cache, no rebuild needed.
    */
   from: string;
   to?: {
