@@ -14,8 +14,10 @@ export interface LoginOptions {
  * Logs the user into the admin panel via the login page.
  */
 export async function login({
+  // Empty by default so paths resolve against Playwright's baseURL (the
+  // PORT-derived dev URL). Pass an absolute serverURL only to target another host.
   page,
-  serverURL = 'http://localhost:3000',
+  serverURL = '',
   user,
 }: LoginOptions): Promise<void> {
   await page.goto(`${serverURL}/admin/login`)

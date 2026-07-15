@@ -5,12 +5,11 @@ import { test, expect } from '@playwright/test'
  * fixes from the impeccable audit (2026-07-15). Content is discovered at
  * runtime rather than hardcoded, and content-dependent checks skip cleanly when
  * a fixture is absent, so the spec stays green across environments.
+ * Paths are relative to Playwright's baseURL (the PORT-derived dev URL).
  */
-const BASE = 'http://localhost:3000'
-
 test.describe('Accessibility & responsive regressions', () => {
   test('inner pages expose a skip link to #main', async ({ page }) => {
-    await page.goto(`${BASE}/posts`)
+    await page.goto('/posts')
     const skip = page.locator('a[href="#main"]')
     await expect(skip).toHaveCount(1)
     await expect(page.locator('main#main')).toHaveCount(1)
@@ -22,7 +21,7 @@ test.describe('Accessibility & responsive regressions', () => {
   test('homepage exposes a banner landmark at desktop and mobile', async ({ page }) => {
     for (const width of [1440, 375]) {
       await page.setViewportSize({ width, height: 900 })
-      await page.goto(BASE)
+      await page.goto('/')
       // The mobile bar and the desktop spine are breakpoint-exclusive, so
       // exactly one banner is in the a11y tree at any width.
       await expect(page.getByRole('banner')).toHaveCount(1)
@@ -32,7 +31,7 @@ test.describe('Accessibility & responsive regressions', () => {
   for (const path of ['/', '/posts', '/work']) {
     test(`no horizontal overflow at 375px on ${path}`, async ({ page }) => {
       await page.setViewportSize({ width: 375, height: 800 })
-      await page.goto(`${BASE}${path}`)
+      await page.goto(path)
       const overflow = await page.evaluate(
         () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
       )
@@ -41,14 +40,14 @@ test.describe('Accessibility & responsive regressions', () => {
   }
 
   test('primary nav links meet a ~44px tap target', async ({ page }) => {
-    await page.goto(BASE)
+    await page.goto('/')
     const link = page.getByRole('link', { name: 'Posts' }).first()
     const box = await link.boundingBox()
     expect(box?.height ?? 0).toBeGreaterThanOrEqual(40)
   })
 
   test('theme toggle applies an explicit theme', async ({ page }) => {
-    await page.goto(BASE)
+    await page.goto('/')
     await page
       .getByRole('button', { name: /Theme:/ })
       .first()
@@ -59,7 +58,7 @@ test.describe('Accessibility & responsive regressions', () => {
 
 test.describe('Media pipeline regressions', () => {
   test('optimized images request q=75 and carry alt text', async ({ page }) => {
-    await page.goto(`${BASE}/work`)
+    await page.goto('/work')
     const img = page.locator('img').first()
     if ((await img.count()) === 0) test.skip(true, 'no images on /work in this environment')
     await expect(img).toHaveAttribute('alt', /\S/)
@@ -69,7 +68,7 @@ test.describe('Media pipeline regressions', () => {
   })
 
   test('image lightbox opens, traps focus, and closes on Esc', async ({ page }) => {
-    await page.goto(`${BASE}/work`)
+    await page.goto('/work')
     const firstProject = page.locator('a[href^="/work/"]').first()
     if ((await firstProject.count()) === 0) test.skip(true, 'no projects to open')
     await firstProject.click()
