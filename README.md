@@ -47,6 +47,10 @@ pnpm dev                   # http://localhost:3000  (admin at /admin)
 - **[`AGENTS.md`](AGENTS.md)** — the developer guide: stack, content model, design direction, conventions, and gotchas. **Start here.**
 - Planning docs (PRD, design spec, build plan) live in a private Obsidian vault.
 
+## Status
+
+This is a personal project: my own site, open-sourced so the code is available to read and borrow from. It is not accepting issues or pull requests. You are welcome to fork it or lift anything useful.
+
 ## License
 
 Code is [MIT](LICENSE)-licensed. Blog content and images are © Richard Kern.
