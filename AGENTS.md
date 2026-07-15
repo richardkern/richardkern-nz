@@ -14,17 +14,17 @@ richardkern.nz — Richard's personal site: a blog covering both technical mater
 | CMS | Payload CMS 3.x |
 | Database | PostgreSQL 17 (local dev: port 5432, db `richardkern-nz`, password `localpassword`) |
 | Styling | Tailwind 4 (no shadcn/ui — removed in de-templating; only the `cn` clsx+tailwind-merge helper remains) |
-| Package manager | pnpm 11 — install with `pnpm ii` (now just plain `pnpm install`; the old `--ignore-workspace` form skipped `pnpm-workspace.yaml`'s `allowBuilds` and `overrides` and silently stripped the security floors from the lockfile — fixed 2026-07-07, same lesson as Westgate) |
+| Package manager | pnpm 11 — install with `pnpm ii` (now just plain `pnpm install`; the old `--ignore-workspace` form skipped `pnpm-workspace.yaml`'s `allowBuilds` and `overrides` and silently stripped the security floors from the lockfile — fixed 2026-07-07) |
 | Runtime | Node.js 24+ |
 | Media | Local disk in dev; Cloudflare R2 in production |
 | Hosting | VPS via Coolify: push `main` → production, `develop` → staging |
-| Analytics | Umami (self-hosted on the Beelink, `analytics.richardkern.nz`) — live |
+| Analytics | Umami (self-hosted) — live |
 
 Rejected alternatives and reasoning: `Personal Site Stack Decisions` in the vault.
 
 ## Workflow
 
-- Branching matches Westgate's pattern: build on `develop`, PR to `main`. Coolify is wired: `develop` → staging, `main` → production. A merge to `main` doesn't always auto-redeploy prod — verify the deployed commit and hit Redeploy in Coolify if it lags. `NEXT_PUBLIC_*` vars inline at build, so set them (and mark build-time) before the prod build, not after.
+- Build on `develop`, PR to `main`. Coolify is wired: `develop` → staging, `main` → production. A merge to `main` doesn't always auto-redeploy prod — verify the deployed commit and hit Redeploy in Coolify if it lags. `NEXT_PUBLIC_*` vars inline at build, so set them (and mark build-time) before the prod build, not after.
 - **The site is live** (launched 2026-07-12). The build phases (00 groundwork → 05 go-live) are done; work is now in Phase 06 (Care): analytics, SEO/structured data, post-launch fixes, dependency upkeep. Session work still ticks the relevant phase note in `30 - Projects/Personal Site/Phases/`, and new scope goes to the Build Plan's Later list rather than expanding the task in hand.
 - Session protocol: at the start of a work session, read the two or three most recent logs in the vault's `90 - Meta/Sessions/`; at the end, write one using the Session Log template there. Full protocol in the vault's `CLAUDE.md`.
 
@@ -95,7 +95,7 @@ Full intent in the vault `Design Spec` (revised 2026-07-06) and `Design Decision
 | `NEXT_PUBLIC_SERVER_URL` | per environment (localhost:3000 / staging domain / richardkern.nz) |
 | `R2_BUCKET`, `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY` | Cloudflare R2 dashboard (production/staging only; dev uses local disk) |
 | `RESEND_API_KEY` | Resend dashboard (staging/production; when unset, Payload logs emails to the console — dev default) |
-| `NEXT_PUBLIC_UMAMI_SRC`, `NEXT_PUBLIC_UMAMI_WEBSITE_ID` | Umami dashboard (self-hosted on the Beelink, `analytics.richardkern.nz`). **Production only**, and **build-time** (NEXT_PUBLIC_* inline at build); both must be set or the tracking script renders nothing (dev/staging default). Outbound social-link clicks are tagged `data-umami-event="social-link"` |
+| `NEXT_PUBLIC_UMAMI_SRC`, `NEXT_PUBLIC_UMAMI_WEBSITE_ID` | self-hosted Umami dashboard. **Production only**, and **build-time** (NEXT_PUBLIC_* inline at build); both must be set or the tracking script renders nothing (dev/staging default). Outbound social-link clicks are tagged `data-umami-event="social-link"` |
 
 ## Common commands
 
