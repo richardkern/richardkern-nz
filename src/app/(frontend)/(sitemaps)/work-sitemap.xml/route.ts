@@ -15,7 +15,7 @@ const getWorkSitemap = unstable_cache(
       limit: 1000,
       pagination: false,
       where: {
-        status: {
+        _status: {
           equals: 'published',
         },
       },

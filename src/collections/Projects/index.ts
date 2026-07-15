@@ -19,6 +19,7 @@ import {
 import { validatedSlugField } from '@/fields/validatedSlugField'
 
 import { authenticated } from '../../access/authenticated'
+import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { Code } from '../../blocks/Code/config'
 import { revalidateDelete, revalidateProject } from './hooks/revalidateProject'
 
@@ -31,18 +32,11 @@ export const Projects: CollectionConfig = {
   access: {
     create: authenticated,
     delete: authenticated,
-    read: ({ req }) => {
-      if (req.user) return true
-      return {
-        status: {
-          equals: 'published',
-        },
-      }
-    },
+    read: authenticatedOrPublished,
     update: authenticated,
   },
   admin: {
-    defaultColumns: ['title', 'status', 'year', 'featured', 'updatedAt'],
+    defaultColumns: ['title', '_status', 'year', 'featured', 'updatedAt'],
     useAsTitle: 'title',
   },
   fields: [
@@ -172,19 +166,6 @@ export const Projects: CollectionConfig = {
       },
     },
     {
-      name: 'status',
-      type: 'select',
-      options: [
-        { label: 'Draft', value: 'draft' },
-        { label: 'Published', value: 'published' },
-      ],
-      defaultValue: 'draft',
-      required: true,
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    {
       name: 'tags',
       type: 'relationship',
       relationTo: 'tags' as const,
@@ -195,4 +176,10 @@ export const Projects: CollectionConfig = {
     },
     validatedSlugField(),
   ],
+  versions: {
+    drafts: {
+      schedulePublish: true,
+    },
+    maxPerDoc: 50,
+  },
 }

@@ -10,7 +10,7 @@ export const revalidateProject: CollectionAfterChangeHook<Project> = ({
   req: { payload, context },
 }) => {
   if (!context.disableRevalidate) {
-    if (doc.status === 'published') {
+    if (doc._status === 'published') {
       const path = `/work/${doc.slug}`
 
       payload.logger.info(`Revalidating project at path: ${path}`)
@@ -21,8 +21,8 @@ export const revalidateProject: CollectionAfterChangeHook<Project> = ({
     // If the project was previously published under a different state or slug,
     // the old path needs revalidating too
     if (
-      previousDoc?.status === 'published' &&
-      (doc.status !== 'published' || previousDoc.slug !== doc.slug)
+      previousDoc?._status === 'published' &&
+      (doc._status !== 'published' || previousDoc.slug !== doc.slug)
     ) {
       const oldPath = `/work/${previousDoc.slug}`
 
@@ -33,7 +33,7 @@ export const revalidateProject: CollectionAfterChangeHook<Project> = ({
 
     // The work index and the homepage both list projects; the work sitemap
     // (cached by tag) must be rebuilt on any publish/unpublish/slug change too
-    if (doc.status === 'published' || previousDoc?.status === 'published') {
+    if (doc._status === 'published' || previousDoc?._status === 'published') {
       revalidatePath('/work')
       revalidatePath('/')
       revalidateTag('work-sitemap', 'max')

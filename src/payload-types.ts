@@ -459,7 +459,6 @@ export interface Project {
   };
   year?: number | null;
   featured?: boolean | null;
-  status: 'draft' | 'published';
   tags?: (number | Tag)[] | null;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
@@ -468,6 +467,7 @@ export interface Project {
   slug: string;
   updatedAt: string;
   createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -827,12 +827,12 @@ export interface ProjectsSelect<T extends boolean = true> {
       };
   year?: T;
   featured?: T;
-  status?: T;
   tags?: T;
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;
   createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1242,6 +1242,10 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'posts';
           value: number | Post;
+        } | null)
+      | ({
+          relationTo: 'projects';
+          value: number | Project;
         } | null);
     global?: string | null;
     user?: (number | null) | User;
