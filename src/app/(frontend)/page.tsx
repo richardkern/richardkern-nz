@@ -61,6 +61,7 @@ export default async function HomePage() {
       <div className="flex flex-1 flex-col md:flex-row">
       {/* Mobile: the spine collapses to a charcoal top bar */}
       <div
+        role="banner"
         data-surface="charcoal"
         className="flex items-center justify-between bg-structural px-5 py-3 md:hidden"
       >
@@ -73,8 +74,12 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {/* Desktop: the notebook spine — vertical wordmark, socials pinned at the foot */}
+      {/* Desktop: the notebook spine — vertical wordmark, socials pinned at the foot.
+          role="banner" gives the identity strip a landmark; the mobile bar above
+          carries the same role and the two are breakpoint-exclusive, so only one
+          is ever in the accessibility tree. */}
       <aside
+        role="banner"
         data-surface="charcoal"
         className="hidden w-21.5 flex-none flex-col items-center bg-structural pt-7.5 pb-6 md:flex"
       >
@@ -101,7 +106,7 @@ export default async function HomePage() {
               <Link
                 key={href}
                 href={href}
-                className="-my-2 py-2 font-sans text-[13.5px] font-medium text-body transition-colors hover:text-accent md:text-[13px]"
+                className="-my-3 py-3 font-sans text-[13.5px] font-medium text-body transition-colors hover:text-accent md:text-[13px]"
               >
                 {label}
               </Link>
@@ -145,7 +150,7 @@ export default async function HomePage() {
                         )}
                         {post.publishedAt && formatLogDate(post.publishedAt, 'day')}
                       </span>
-                      <span className="self-center font-serif text-[15px] leading-[1.45] text-body transition-colors group-hover:text-accent md:text-[16px]">
+                      <span className="min-w-0 self-center font-serif text-[15px] leading-[1.45] break-words text-body transition-colors group-hover:text-accent md:text-[16px]">
                         {post.title}
                       </span>
                     </Link>
@@ -156,7 +161,7 @@ export default async function HomePage() {
                 <p className="mt-4">
                   <Link
                     href="/posts"
-                    className="font-sans text-[13px] font-medium text-accent hover:underline"
+                    className="-my-2 inline-block py-2 font-sans text-[13px] font-medium text-accent hover:underline"
                   >
                     Full log →
                   </Link>
@@ -181,6 +186,7 @@ export default async function HomePage() {
                           {project.coverImage && typeof project.coverImage === 'object' && (
                             <Media
                               resource={project.coverImage}
+                              alt={project.title}
                               fill
                               imgClassName="object-cover object-top"
                               size="(max-width: 1024px) 92vw, 760px"
@@ -188,7 +194,7 @@ export default async function HomePage() {
                           )}
                         </div>
                         <div className="mt-3 flex items-baseline justify-between gap-4">
-                          <h3 className="font-serif text-[15px] leading-[1.45] text-body transition-colors group-hover:text-accent md:text-[16px]">
+                          <h3 className="min-w-0 font-serif text-[15px] leading-[1.45] break-words text-body transition-colors group-hover:text-accent md:text-[16px]">
                             {project.title}
                           </h3>
                           <span className="flex-none font-mono text-[10.5px] text-muted md:text-[11px]">
@@ -209,7 +215,7 @@ export default async function HomePage() {
                 <p className="mt-4">
                   <Link
                     href="/work"
-                    className="font-sans text-[13px] font-medium text-accent hover:underline"
+                    className="-my-2 inline-block py-2 font-sans text-[13px] font-medium text-accent hover:underline"
                   >
                     All work →
                   </Link>

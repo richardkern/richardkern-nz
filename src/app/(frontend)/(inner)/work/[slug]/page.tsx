@@ -15,6 +15,9 @@ import { getCachedGlobal } from '@/utilities/getGlobals'
 import { projectJsonLd } from '@/utilities/jsonld'
 import { getMediaUrl } from '@/utilities/getMediaUrl'
 
+// ISR: prerendered project pages refresh at most every 10 minutes.
+export const revalidate = 600
+
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
   const projects = await payload.find({
@@ -67,7 +70,7 @@ export default async function ProjectPage({ params: paramsPromise }: Args) {
         )}
       </p>
 
-      <h1 className="mt-3.5 font-display text-[34px] leading-[1.05] font-bold tracking-[-0.03em] text-body md:text-[44px]">
+      <h1 className="mt-3.5 font-display text-[34px] leading-[1.05] font-bold tracking-[-0.03em] break-words text-body md:text-[44px]">
         {project.title}
       </h1>
 
@@ -78,7 +81,7 @@ export default async function ProjectPage({ params: paramsPromise }: Args) {
               href={project.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-sans text-[13.5px] font-medium text-accent hover:underline"
+              className="-my-2 inline-block py-2 font-sans text-[13.5px] font-medium text-accent hover:underline"
             >
               Live site <span aria-hidden="true">↗</span>
             </a>
@@ -88,7 +91,7 @@ export default async function ProjectPage({ params: paramsPromise }: Args) {
               href={project.repoUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-sans text-[13.5px] font-medium text-accent hover:underline"
+              className="-my-2 inline-block py-2 font-sans text-[13.5px] font-medium text-accent hover:underline"
             >
               Repository <span aria-hidden="true">↗</span>
             </a>

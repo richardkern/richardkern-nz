@@ -30,7 +30,10 @@ const nextConfig: NextConfig = {
         pathname: '/api/media/file/**',
       },
     ],
-    qualities: [100],
+    // 75 is the default the Media component requests; 100 stays allowed for any
+    // caller that opts into near-lossless output. Next 16 rejects a quality not
+    // in this list.
+    qualities: [75, 100],
     remotePatterns: [
       ...[NEXT_PUBLIC_SERVER_URL /* 'https://example.com' */].map((item) => {
         const url = new URL(item)

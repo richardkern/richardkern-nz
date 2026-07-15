@@ -12,6 +12,9 @@ import { SocialTextLinks } from '@/components/site/socialLinks'
 import { generateMeta } from '@/utilities/generateMeta'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 
+// ISR: prerendered CMS pages refresh at most every 10 minutes.
+export const revalidate = 600
+
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
   const pages = await payload.find({

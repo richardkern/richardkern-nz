@@ -19,6 +19,10 @@ import { getMediaUrl } from '@/utilities/getMediaUrl'
 import { postJsonLd } from '@/utilities/jsonld'
 import { formatEntryNo, formatLogDate, getPostNumbers } from '@/utilities/logbook'
 
+// ISR: statically prerendered pages refresh at most every 10 minutes, so
+// edited/published posts appear without a full rebuild.
+export const revalidate = 600
+
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
   const posts = await payload.find({
@@ -114,7 +118,7 @@ export default async function PostPage({ params: paramsPromise }: Args) {
           )}
         </p>
 
-        <h1 className="mt-[18px] font-display text-[32px] leading-[1.08] font-bold tracking-[-0.03em] text-body md:text-[46px]">
+        <h1 className="mt-[18px] font-display text-[32px] leading-[1.08] font-bold tracking-[-0.03em] break-words text-body md:text-[46px]">
           {post.title}
         </h1>
 
@@ -123,7 +127,13 @@ export default async function PostPage({ params: paramsPromise }: Args) {
             fetches), so rendering both is cheap and avoids a grid row-span hack. */}
         {cover && (
           <ImageZoom src={coverFullSrc} alt={coverAlt} className="mt-10 block lg:hidden">
-            <Media resource={cover} htmlElement={null} imgClassName="w-full border border-rule" />
+            <Media
+              resource={cover}
+              alt={coverAlt}
+              htmlElement={null}
+              imgClassName="w-full border border-rule"
+              size="(max-width: 1024px) 92vw, 720px"
+            />
           </ImageZoom>
         )}
 
@@ -140,9 +150,9 @@ export default async function PostPage({ params: paramsPromise }: Args) {
           </p>
           <Link
             href="/posts"
-            className="flex-none font-sans text-[13px] font-medium text-accent hover:underline"
+            className="-my-2 inline-block flex-none py-2 font-sans text-[13px] font-medium text-accent hover:underline"
           >
-            ← Full log
+            <span aria-hidden="true">←</span> Full log
           </Link>
         </footer>
       </div>
@@ -153,7 +163,13 @@ export default async function PostPage({ params: paramsPromise }: Args) {
           alt={coverAlt}
           className="hidden lg:col-start-2 lg:row-start-1 lg:block lg:sticky lg:top-[88px] lg:self-start"
         >
-          <Media resource={cover} htmlElement={null} imgClassName="w-full border border-rule" />
+          <Media
+            resource={cover}
+            alt={coverAlt}
+            htmlElement={null}
+            imgClassName="w-full border border-rule"
+            size="360px"
+          />
         </ImageZoom>
       )}
     </article>

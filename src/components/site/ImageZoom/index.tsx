@@ -32,7 +32,16 @@ export const ImageZoom: React.FC<{
     const trigger = triggerRef.current
 
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') close()
+      if (e.key === 'Escape') {
+        close()
+        return
+      }
+      // Single-control dialog: trap Tab on the close button so focus can't
+      // wander back to the page behind the scrim.
+      if (e.key === 'Tab') {
+        e.preventDefault()
+        closeRef.current?.focus()
+      }
     }
     document.addEventListener('keydown', onKey)
 
@@ -66,6 +75,7 @@ export const ImageZoom: React.FC<{
             role="dialog"
             aria-modal="true"
             aria-label={alt || 'Enlarged image'}
+            data-surface="charcoal"
             onClick={close}
             className="fixed inset-0 z-[60] flex items-center justify-center bg-charcoal/90 p-6 md:p-10"
           >
@@ -74,7 +84,7 @@ export const ImageZoom: React.FC<{
               type="button"
               onClick={close}
               aria-label="Close enlarged image"
-              className="absolute top-5 right-5 flex size-9 items-center justify-center rounded-full border border-paper-border text-paper-dim transition-colors hover:border-moss hover:text-paper"
+              className="absolute top-5 right-5 flex size-11 items-center justify-center rounded-full border border-paper-border text-paper-dim transition-colors hover:border-moss hover:text-paper"
             >
               <svg
                 width="16"

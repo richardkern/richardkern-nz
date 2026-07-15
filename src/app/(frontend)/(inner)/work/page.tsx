@@ -40,20 +40,22 @@ export default async function Page() {
         <p className="py-10 font-serif text-[17px] text-muted">Nothing to show yet.</p>
       ) : (
         <div className="mt-9 grid gap-12 md:mt-11 md:grid-cols-2 md:gap-x-14 md:gap-y-16">
-          {projects.docs.map((project) => (
+          {projects.docs.map((project, index) => (
             <Link key={project.id} href={`/work/${project.slug}`} className="group block">
               <div className="relative aspect-[16/10] overflow-hidden border border-rule bg-hairline">
                 {project.coverImage && typeof project.coverImage === 'object' && (
                   <Media
                     resource={project.coverImage}
+                    alt={project.title}
                     fill
+                    priority={index === 0}
                     imgClassName="object-cover"
                     size="(max-width: 768px) 100vw, 512px"
                   />
                 )}
               </div>
               <div className="mt-4 flex items-baseline justify-between gap-6">
-                <h2 className="font-display text-[19px] leading-[1.2] font-semibold tracking-[-0.02em] text-body transition-colors group-hover:text-accent md:text-[22px]">
+                <h2 className="min-w-0 font-display text-[19px] leading-[1.2] font-semibold tracking-[-0.02em] break-words text-body transition-colors group-hover:text-accent md:text-[22px]">
                   {project.title}
                 </h2>
                 <span className="flex-none font-mono text-[11.5px] text-muted">
