@@ -86,7 +86,12 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
         .join(', ')
 
   return (
-    <picture className={cn(pictureClassName)}>
+    // With `fill`, next/image needs its immediate parent to be positioned.
+    // The <picture> here has no <source> siblings, so it exists only as a
+    // wrapper; overlay it on the caller's sized `relative` box (`absolute
+    // inset-0`) so it becomes that valid positioned parent. Same rendered box
+    // the fill image already occupied — this only silences the dev warning.
+    <picture className={cn({ 'absolute inset-0': fill }, pictureClassName)}>
       <NextImage
         alt={alt || ''}
         className={cn(imgClassName)}

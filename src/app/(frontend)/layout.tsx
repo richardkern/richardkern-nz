@@ -52,11 +52,21 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body>
-        <AdminBar
-          adminBarProps={{
-            preview: isEnabled,
-          }}
-        />
+        {/* Only mount the admin bar in draft/preview mode. Entering preview
+            requires an authenticated editor (see next/preview), so on an
+            anonymous page view AdminBar is never in the tree: its module
+            factory never runs and its per-view fetch to /api/users/me never
+            fires. (The code still downloads — Turbopack co-bundles it with the
+            theme toggle — but nothing executes it, so it costs no main-thread
+            time.) A logged-in editor browsing the live, non-preview site no
+            longer sees the bar; that convenience is traded for the win. */}
+        {isEnabled && (
+          <AdminBar
+            adminBarProps={{
+              preview: isEnabled,
+            }}
+          />
+        )}
         {children}
         <Analytics />
       </body>
