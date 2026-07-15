@@ -83,4 +83,12 @@ export const metadata: Metadata = {
   description:
     'Notes, projects and writing from Richard Kern, a product manager in New Zealand telecommunications who builds things and writes down what he learns.',
   openGraph: mergeOpenGraph(),
+  // twitter:site/creator can't be derived from openGraph, so set them here.
+  // card/title/description/images are left to Next's inference from the
+  // resolved openGraph so each page keeps its own title and image.
+  twitter: {
+    card: 'summary_large_image',
+    site: '@richardkern_nz',
+    creator: '@richardkern_nz',
+  },
 }
