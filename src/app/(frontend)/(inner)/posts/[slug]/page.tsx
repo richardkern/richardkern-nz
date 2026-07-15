@@ -192,6 +192,11 @@ const queryPostBySlug = cache(async ({ slug }: { slug: string }) => {
 
   const result = await payload.find({
     collection: 'posts',
+    // depth 1 populates every relationship the page reads — coverImage, tags,
+    // meta.image, and any uploads/internal links embedded in the Lexical content
+    // (all one hop from the post). The default depth 2 only adds a second hop the
+    // page never touches (tags and media are terminal, with no further relations).
+    depth: 1,
     draft,
     limit: 1,
     overrideAccess: draft,

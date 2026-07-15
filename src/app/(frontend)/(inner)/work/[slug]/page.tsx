@@ -155,6 +155,10 @@ const queryProjectBySlug = cache(async ({ slug }: { slug: string }) => {
 
   const result = await payload.find({
     collection: 'projects',
+    // depth 1 covers coverImage, gallery uploads, tags, and meta.image — every
+    // relationship the page reads is one hop from the project. Default depth 2
+    // only adds an unused second hop.
+    depth: 1,
     limit: 1,
     overrideAccess: false,
     pagination: false,
