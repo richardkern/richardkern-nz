@@ -99,7 +99,7 @@ Full intent in the vault `Design Spec` (revised 2026-07-06) and `Design Decision
 
 ## Common commands
 
-- `pnpm dev` — run the app (`docker compose up -d` first for the database)
+- `pnpm dev` — run the app on **port 3000** (richardkern.nz's reserved dev port, so it doesn't collide with a sibling project on 3001; mirrors the per-project Postgres ports). The port is a single source of truth: `PORT` in `.env` drives `scripts/dev.mjs`, Playwright's `baseURL`, and the local media-URL fallbacks, defaulting to 3000. (`docker compose up -d` first for the database.)
 - `pnpm build` — production build (postbuild generates the sitemap)
 - `pnpm lint` / `pnpm lint:fix`
 - `pnpm test` — integration (vitest) then e2e (playwright); `pnpm test:int` / `pnpm test:e2e` individually
