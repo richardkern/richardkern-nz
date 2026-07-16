@@ -10,6 +10,7 @@ import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Projects } from './collections/Projects'
 import { Tags } from './collections/Tags'
+import { Technologies } from './collections/Technologies'
 import { Users } from './collections/Users'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
@@ -61,7 +62,7 @@ export default buildConfig({
     // migrations during the deploy build. See AGENTS.md "Conventions".
     migrationDir: path.resolve(dirname, 'migrations'),
   }),
-  collections: [Pages, Posts, Projects, Media, Tags, Users],
+  collections: [Pages, Posts, Projects, Media, Tags, Technologies, Users],
   cors: [getServerSideURL()].filter(Boolean),
   // Real email only when the key is present (staging/production); without it
   // Payload falls back to logging emails to the console, which is what dev wants.

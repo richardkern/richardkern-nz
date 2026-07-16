@@ -6,6 +6,7 @@ import Link from 'next/link'
 import React from 'react'
 
 import { Media } from '@/components/Media'
+import { projectTechLabels } from '@/utilities/projectTech'
 
 export const dynamic = 'force-static'
 export const revalidate = 600
@@ -25,6 +26,7 @@ export default async function Page() {
       description: true,
       year: true,
       tech: true,
+      technologies: true,
       featured: true,
       coverImage: true,
     },
@@ -68,11 +70,12 @@ export default async function Page() {
                   {project.description}
                 </p>
               )}
-              {project.tech && project.tech.length > 0 && (
-                <p className="mt-2.5 font-mono text-[11.5px] text-accent">
-                  {project.tech.map((t) => t.label).join(' · ')}
-                </p>
-              )}
+              {(() => {
+                const labels = projectTechLabels(project)
+                return labels.length > 0 ? (
+                  <p className="mt-2.5 font-mono text-[11.5px] text-accent">{labels.join(' · ')}</p>
+                ) : null
+              })()}
             </Link>
           ))}
         </div>
