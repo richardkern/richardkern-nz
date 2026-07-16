@@ -72,6 +72,7 @@ export interface Config {
     projects: Project;
     media: Media;
     tags: Tag;
+    technologies: Technology;
     users: User;
     redirects: Redirect;
     'payload-kv': PayloadKv;
@@ -92,6 +93,7 @@ export interface Config {
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     tags: TagsSelect<false> | TagsSelect<true>;
+    technologies: TechnologiesSelect<false> | TechnologiesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -440,6 +442,7 @@ export interface Project {
         id?: string | null;
       }[]
     | null;
+  technologies?: (number | Technology)[] | null;
   coverImage?: (number | null) | Media;
   images?:
     | {
@@ -468,6 +471,21 @@ export interface Project {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "technologies".
+ */
+export interface Technology {
+  id: number;
+  name: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -658,6 +676,10 @@ export interface PayloadLockedDocument {
         value: number | Tag;
       } | null)
     | ({
+        relationTo: 'technologies';
+        value: number | Technology;
+      } | null)
+    | ({
         relationTo: 'users';
         value: number | User;
       } | null)
@@ -809,6 +831,7 @@ export interface ProjectsSelect<T extends boolean = true> {
         label?: T;
         id?: T;
       };
+  technologies?: T;
   coverImage?: T;
   images?:
     | T
@@ -933,6 +956,17 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "tags_select".
  */
 export interface TagsSelect<T extends boolean = true> {
+  name?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "technologies_select".
+ */
+export interface TechnologiesSelect<T extends boolean = true> {
   name?: T;
   generateSlug?: T;
   slug?: T;

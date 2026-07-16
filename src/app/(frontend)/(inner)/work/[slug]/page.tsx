@@ -14,6 +14,7 @@ import { generateMeta } from '@/utilities/generateMeta'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 import { projectJsonLd } from '@/utilities/jsonld'
 import { getMediaUrl } from '@/utilities/getMediaUrl'
+import { projectTechLabels } from '@/utilities/projectTech'
 
 // ISR: prerendered project pages refresh at most every 10 minutes.
 export const revalidate = 600
@@ -50,7 +51,7 @@ export default async function ProjectPage({ params: paramsPromise }: Args) {
 
   const siteSettings = await getCachedGlobal('site-settings', 0)()
 
-  const tech = (project.tech ?? []).map((t) => t.label).join(' · ')
+  const tech = projectTechLabels(project).join(' · ')
   const gallery = (project.images ?? []).filter(
     (item) => item.image && typeof item.image === 'object',
   )

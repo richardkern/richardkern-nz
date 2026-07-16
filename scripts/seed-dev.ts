@@ -12,6 +12,7 @@ import 'dotenv/config'
 import { getPayload } from 'payload'
 import sharp from 'sharp'
 import config from '../src/payload.config'
+import { backfillProjectTechnologies } from '../src/utilities/backfillProjectTechnologies'
 
 const DEV_USER = {
   email: 'richard.kern@gmail.com',
@@ -428,6 +429,10 @@ const plan = await model.complete({
       },
     },
   })
+
+  // Promote the projects' legacy `tech` labels into durable Technologies (#61),
+  // sharing the exact backfill the migration runs so fresh dev matches prod.
+  await backfillProjectTechnologies(payload)
 
   payload.logger.info('Seed complete.')
   process.exit(0)

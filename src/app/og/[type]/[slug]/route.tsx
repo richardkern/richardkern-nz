@@ -5,6 +5,7 @@ import path from 'path'
 import { getPayload } from 'payload'
 
 import { formatEntryNo, formatLogDate, getPostNumbers } from '@/utilities/logbook'
+import { projectTechLabels } from '@/utilities/projectTech'
 
 /**
  * Generated Open Graph card (issue #47) — the "charcoal cover" of an entry.
@@ -55,9 +56,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ type: s
   } else if (collection === 'projects' && 'year' in doc) {
     const parts: string[] = []
     if (doc.year) parts.push(String(doc.year))
-    if (Array.isArray(doc.tech)) {
-      for (const t of doc.tech.slice(0, 3)) if (t?.label) parts.push(t.label)
-    }
+    parts.push(...projectTechLabels(doc).slice(0, 3))
     logbook = parts.join(SEP)
   }
 
