@@ -25,7 +25,6 @@ export default async function Page() {
       slug: true,
       description: true,
       year: true,
-      tech: true,
       technologies: true,
       featured: true,
       coverImage: true,

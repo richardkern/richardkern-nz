@@ -436,12 +436,6 @@ export interface Project {
     };
     [k: string]: unknown;
   } | null;
-  tech?:
-    | {
-        label: string;
-        id?: string | null;
-      }[]
-    | null;
   technologies?: (number | Technology)[] | null;
   coverImage?: (number | null) | Media;
   images?:
@@ -825,12 +819,6 @@ export interface ProjectsSelect<T extends boolean = true> {
   title?: T;
   description?: T;
   longDescription?: T;
-  tech?:
-    | T
-    | {
-        label?: T;
-        id?: T;
-      };
   technologies?: T;
   coverImage?: T;
   images?:
