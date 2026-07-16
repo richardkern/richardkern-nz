@@ -73,22 +73,6 @@ export const Projects: CollectionConfig = {
               label: 'Long Description',
             },
             {
-              // Legacy free-text tech (issue #61): superseded by the
-              // `technologies` relationship below. Hidden in admin and read only
-              // by the backfill migration; a follow-up removes it once verified.
-              name: 'tech',
-              type: 'array',
-              label: 'Technologies (legacy)',
-              admin: { hidden: true },
-              fields: [
-                {
-                  name: 'label',
-                  type: 'text',
-                  required: true,
-                },
-              ],
-            },
-            {
               name: 'technologies',
               type: 'relationship',
               relationTo: 'technologies' as const,

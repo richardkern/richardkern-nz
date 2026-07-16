@@ -1,6 +1,7 @@
 import type { Media, Post, Project, SiteSetting } from '../payload-types'
 
 import { getServerSideURL } from './getURL'
+import { projectTechLabels } from './projectTech'
 
 // Structured data (schema.org JSON-LD). Each builder returns a single document
 // with an `@graph`, so the Person and WebSite entities are defined once per page
@@ -99,7 +100,7 @@ export function projectJsonLd(project: Project, site: Site) {
   const base = getServerSideURL()
   const url = `${base}/work/${project.slug}`
   const image = imageURL(project.meta?.image ?? project.coverImage)
-  const keywords = (project.tech ?? []).map((t) => t.label).filter(Boolean)
+  const keywords = projectTechLabels(project)
   const sameAs = [project.url, project.repoUrl].filter((u): u is string => Boolean(u))
 
   return {
