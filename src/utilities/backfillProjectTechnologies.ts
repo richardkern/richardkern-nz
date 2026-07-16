@@ -28,10 +28,21 @@ export const backfillProjectTechnologies = async (
       overrideAccess: true,
       req,
     })
-    const id =
-      existing.docs[0]?.id ??
-      (await payload.create({ collection: 'technologies', data: { name }, overrideAccess: true, req }))
-        .id
+    let id = existing.docs[0]?.id
+    if (id == null) {
+      // Passing `req` (the migration transaction) to payload.create makes its
+      // overload resolution demand a `draft` prop that Technologies — a
+      // non-versioned collection — has no business requiring. `next build` fails
+      // on it though `tsc --noEmit` does not, so cast the options to the create
+      // parameter type; the call is valid at runtime (the seed exercises it).
+      const created = await payload.create({
+        collection: 'technologies',
+        data: { name },
+        overrideAccess: true,
+        req,
+      } as Parameters<typeof payload.create>[0])
+      id = created.id
+    }
     byName.set(key, id)
     return id
   }
