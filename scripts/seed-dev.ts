@@ -12,7 +12,6 @@ import 'dotenv/config'
 import { getPayload } from 'payload'
 import sharp from 'sharp'
 import config from '../src/payload.config'
-import { backfillProjectTechnologies } from '../src/utilities/backfillProjectTechnologies'
 
 const DEV_USER = {
   email: 'richard.kern@gmail.com',
@@ -308,6 +307,24 @@ const plan = await model.complete({
     })
   }
 
+  // ── Technologies ── (durable, reused across projects; #61)
+  const techIds = new Map<string, number>()
+  const tech = async (name: string): Promise<number> => {
+    const key = name.toLowerCase()
+    const cached = techIds.get(key)
+    if (cached) return cached
+    // Cast: payload.create for the non-versioned Technologies collection can't
+    // narrow its select type here and demands a `draft` prop — a `next build`
+    // error tsc --noEmit misses. Valid at runtime.
+    const created = await payload.create({
+      collection: 'technologies',
+      context: { disableRevalidate: true },
+      data: { name },
+    } as Parameters<typeof payload.create>[0])
+    techIds.set(key, created.id)
+    return created.id
+  }
+
   // ── Projects ──
   await payload.create({
     collection: 'projects',
@@ -319,7 +336,7 @@ const plan = await model.complete({
       year: 2026,
       featured: true,
       _status: 'published',
-      tech: [{ label: 'next.js' }, { label: 'open data' }, { label: 'vps' }],
+      technologies: [await tech('next.js'), await tech('open data'), await tech('vps')],
       url: 'https://example.com',
       repoUrl: 'https://github.com/richardkern',
       coverImage: media['harbour-cover'],
@@ -350,7 +367,7 @@ const plan = await model.complete({
       year: 2025,
       featured: true,
       _status: 'published',
-      tech: [{ label: 'go' }, { label: 'docker' }, { label: 'postgres' }],
+      technologies: [await tech('go'), await tech('docker'), await tech('postgres')],
       repoUrl: 'https://github.com/richardkern',
       coverImage: media['rackline-cover'],
       tags: [tags.homelab],
@@ -374,7 +391,7 @@ const plan = await model.complete({
       year: 2026,
       featured: false,
       _status: 'published',
-      tech: [{ label: 'next.js' }, { label: 'payload' }, { label: 'postgres' }],
+      technologies: [await tech('next.js'), await tech('payload'), await tech('postgres')],
       repoUrl: 'https://github.com/richardkern/richardkern-nz',
       coverImage: media['site-cover'],
       tags: [tags.web],
@@ -429,10 +446,6 @@ const plan = await model.complete({
       },
     },
   })
-
-  // Promote the projects' legacy `tech` labels into durable Technologies (#61),
-  // sharing the exact backfill the migration runs so fresh dev matches prod.
-  await backfillProjectTechnologies(payload)
 
   payload.logger.info('Seed complete.')
   process.exit(0)
