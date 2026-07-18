@@ -36,6 +36,13 @@ updates:
     open-pull-requests-limit: 5
     labels:
       - dependencies
+    ignore:
+      # TypeScript 7.0.x can't merge: it's the new native compiler and
+      # typescript-eslint fails to load against it, so lint goes red. The fix
+      # rides in TS 7.1 (~Oct 2026), which is NOT ignored and will surface a
+      # PR when it ships. Revisit sooner if typescript-eslint patches 7.0.
+      - dependency-name: "typescript"
+        versions: ["7.0.x"]
     groups:
       # Lockstep: payload core + all official plugins/adapters in one PR,
       # majors included (they must never move independently).
@@ -43,15 +50,45 @@ updates:
         patterns:
           - "payload"
           - "@payloadcms/*"
-      # Everything else: minor + patch grouped to cut noise.
-      # Non-payload majors are intentionally left out so they arrive as
-      # individual PRs that get reviewed on their own.
+      # Lint toolchain in lockstep, majors included: ESLint and its plugins
+      # share the plugin API, so a solo eslint major (9 -> 10) breaks while the
+      # plugins still call the removed API. Grouping keeps them mergeable.
+      eslint:
+        patterns:
+          - "eslint"
+          - "@eslint/*"
+          - "eslint-*"
+          - "@typescript-eslint/*"
+          - "typescript-eslint"
+          - "@next/eslint-plugin-next"
+      # Vitest test stack in lockstep, majors included: @vitejs/plugin-react
+      # reaches into vite internals, so plugin-react, vite and vitest must move
+      # together or the vitest config fails to load.
+      vitest:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
+          - "vite"
+          - "@vitejs/*"
+      # Everything else: minor + patch grouped to cut noise. Non-grouped
+      # majors (e.g. typescript, dotenv, graphql) still arrive as individual
+      # PRs that get reviewed on their own.
       minor-and-patch:
         patterns:
           - "*"
         exclude-patterns:
           - "payload"
           - "@payloadcms/*"
+          - "eslint"
+          - "@eslint/*"
+          - "eslint-*"
+          - "@typescript-eslint/*"
+          - "typescript-eslint"
+          - "@next/eslint-plugin-next"
+          - "vitest"
+          - "@vitest/*"
+          - "vite"
+          - "@vitejs/*"
         update-types:
           - minor
           - patch
