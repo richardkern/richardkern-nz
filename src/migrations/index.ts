@@ -5,6 +5,7 @@ import * as migration_20260715_222659_backfill_project_versions from './20260715
 import * as migration_20260716_000108_add_technologies from './20260716_000108_add_technologies';
 import * as migration_20260716_000200_backfill_technologies from './20260716_000200_backfill_technologies';
 import * as migration_20260716_014453_drop_legacy_project_tech from './20260716_014453_drop_legacy_project_tech';
+import * as migration_20260723_090219_add_social_blurb from './20260723_090219_add_social_blurb';
 
 export const migrations = [
   {
@@ -40,6 +41,11 @@ export const migrations = [
   {
     up: migration_20260716_014453_drop_legacy_project_tech.up,
     down: migration_20260716_014453_drop_legacy_project_tech.down,
-    name: '20260716_014453_drop_legacy_project_tech'
+    name: '20260716_014453_drop_legacy_project_tech',
+  },
+  {
+    up: migration_20260723_090219_add_social_blurb.up,
+    down: migration_20260723_090219_add_social_blurb.down,
+    name: '20260723_090219_add_social_blurb'
   },
 ];

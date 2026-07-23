@@ -251,6 +251,10 @@ export interface Post {
   };
   coverImage?: (number | null) | Media;
   tags?: (number | Tag)[] | null;
+  /**
+   * Hook for the syndicated social post, in your own voice — not a repeat of the SEO description (platforms already show that in the link preview). Optional: syndication falls back to the SEO description when empty. Max 280 characters, the tightest platform limit.
+   */
+  socialBlurb?: string | null;
   meta?: {
     title?: string | null;
     /**
@@ -797,6 +801,7 @@ export interface PostsSelect<T extends boolean = true> {
   content?: T;
   coverImage?: T;
   tags?: T;
+  socialBlurb?: T;
   meta?:
     | T
     | {
