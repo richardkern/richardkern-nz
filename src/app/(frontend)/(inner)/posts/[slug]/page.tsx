@@ -8,6 +8,7 @@ import Link from 'next/link'
 import React, { cache } from 'react'
 import RichText from '@/components/RichText'
 
+import { Comments } from '@/components/site/Comments'
 import { JsonLd } from '@/components/JsonLd'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { Media } from '@/components/Media'
@@ -155,6 +156,8 @@ export default async function PostPage({ params: paramsPromise }: Args) {
             <span aria-hidden="true">←</span> Full log
           </Link>
         </footer>
+
+        <Comments />
       </div>
 
       {cover && (

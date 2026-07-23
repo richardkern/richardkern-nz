@@ -101,9 +101,11 @@ const nextConfig: NextConfig = {
       "img-src 'self' data:",
       "font-src 'self'",
       "style-src 'self' 'unsafe-inline'",
-      "script-src 'self' 'unsafe-inline'",
+      // giscus (post comments): its loader script runs on our origin and the
+      // widget itself is an iframe on giscus.app.
+      "script-src 'self' 'unsafe-inline' https://giscus.app",
       "connect-src 'self'",
-      "frame-src 'self'",
+      "frame-src 'self' https://giscus.app",
       "worker-src 'self' blob:",
       "manifest-src 'self'",
       'report-uri /csp-report',
