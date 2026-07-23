@@ -117,6 +117,15 @@ export const Posts: CollectionConfig<'posts'> = {
               hasMany: true,
               relationTo: 'tags' as const,
             },
+            {
+              name: 'socialBlurb',
+              type: 'textarea',
+              maxLength: 280,
+              admin: {
+                description:
+                  'Hook for the syndicated social post, in your own voice — not a repeat of the SEO description (platforms already show that in the link preview). Optional: syndication falls back to the SEO description when empty. Max 280 characters, the tightest platform limit.',
+              },
+            },
           ],
           label: 'Meta',
         },
